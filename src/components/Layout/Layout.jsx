@@ -1,21 +1,26 @@
 import React from 'react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import Footer from '../Footer/Footer';
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <Sidebar />
-
-      <div className="flex-1 ml-[20%] flex flex-col">
-        {/* Header */}
-        <Header />
-{/* 
-        <div className="flex-1 p-4 mt-16">
-          <p>Main content goes here.</p>
-        </div> */}
+    <div className="flex flex-col h-screen">
+      {/* Header */}
+      <Header />
+      
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <Sidebar />
+        
+        {/* Main Content Area */}
+        <main className="flex-1 ml-[20%] p-4">
+          {children}
+        </main>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

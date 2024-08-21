@@ -48,12 +48,12 @@ const Sidebar = () => {
     },
     {
       icon: <AddIcon fontSize="small" />,
-      link: "Add Art & Music",
+      link: "Add Product",
       href: "/art-and-music",
     },
     {
       icon: <MusicNoteIcon fontSize="small" />,
-      link: "Your Art & Music",
+      link: "Your Product",
       href: "/list-art-and-music",
     },
     {

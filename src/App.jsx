@@ -9,13 +9,13 @@ import Layout from "./components/Layout/Layout";
 const App = () => {
   return (
     <Router>
-        <Layout/>
+        {/* <Layout/> */}
       {/* <Header />  */}
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
 
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </Router>
   );
 };
