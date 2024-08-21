@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+  background: #fafafa;
+  -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-thumb {
+  /* background: rgb(38,160,252); */
+  background: rgb(184, 184, 185);
+  -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+  background: #fff3;
+}
+
+/* navigation bar */
+
+@keyframes drop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+  animation: drop 1s forwards, shine 2s infinite;
+}
+
+.letter:nth-child(1) {
+  animation-delay: 0s, 1s;
+}
+
+.letter:nth-child(2) {
+  animation-delay: 0.5s, 1s;
+}
+
+.letter:nth-child(3) {
+  animation-delay: 1s, 1s;
+}
+
+.graph-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    green 25%,
+    transparent 25%,
+    transparent 50%,
+    green 50%,
+    green 75%,
+    transparent 75%
+  );
+  background-size: 20px 2px;
+  animation: move 2s linear infinite;
+}
+
+@keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+@layer utilities {
+  .text-gradient-from-purple-to-pink {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(
+      to right,
+      rgb(241, 240, 243),
+      rgb(114, 101, 116)
+    );
+  }
+}
+
+.animate-move {
+  animation: mover 2s infinite alternate;
+}
+
+@keyframes mover {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  100% {
+    transform: translateY(-10px) translateX(10px);
+  }
+}
+
+.logoBody {
+  /* background: url("./assets/bg/logobg.jpeg") no-repeat; */
+  /* background-size: cover; 
+  background-position: center;
+  object-fit: cover; */
+  /* animation: animationBg 5s linear infinite; */
+}
+
+@keyframes animationBg {
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
