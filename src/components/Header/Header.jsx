@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full bg-[#070A68] border-b border-[#000] flex items-center justify-between p-4 fixed top-0  right-0 z-10">
+    <div className="w-full bg-[#070A68] border-b border-[#000] flex items-center justify-between p-4 fixed top-0  right-0 z-10 h-24">
       {/* Main Header Content */}
       <div className="flex-1 flex justify-start items-center ml-72 ">
         <div className="text-[#fff]">

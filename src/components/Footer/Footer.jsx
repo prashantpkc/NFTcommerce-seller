@@ -8,9 +8,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-white shadow-md">
-      <div className="container py-9 border-2 border-black flex justify-between text-sm">
+      <div className="container py-9 flex justify-between text-sm">
         <div className="ml-28 flex space-x-6">
-          <p>© Copyright <span className="font-bold">Akeshya.</span> All Rights Reserved</p>
+          <p>© Copyright <span className="font-bold">Centumworld.</span> All Rights Reserved</p>
         </div>
         <div className="mr-28 space-x-6 text-[#14279B]">
           <span>
