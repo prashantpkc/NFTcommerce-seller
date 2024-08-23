@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Layout from "./components/Layout/Layout";
+import Login from "./components/Login/login";
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
       {/* <Header />  */}
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
-
+        <Route path="/login" element={<Login/>} />
       </Routes>
       {/* <Footer/> */}
     </Router>
