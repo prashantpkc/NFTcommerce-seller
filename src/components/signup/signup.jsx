@@ -3,7 +3,7 @@ import image2 from "./image2.png";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate()
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -11,15 +11,15 @@ const Login = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const goSignup = () =>{
-    navigate("/Signup")
+  const GoSignIn = () =>{
+    navigate("/Login")
   }
 
   return (
     <div className="bg-gradient-to-t from-purple-500 to-blue-500 w-full min-h-screen flex flex-col lg:flex-row items-center justify-center">
       {/* Image container: hidden on screens smaller than large */}
       <div className="w-full lg:w-1/2  justify-center mb-10 lg:mb-0 hidden lg:flex">
-        <img src={image2} alt="Login" className="max-w-full h-auto lg:ml-28" />
+        <img src={image2} alt="Signup" className="max-w-full h-auto lg:ml-28" />
       </div>
 
       {/* Form container */}
@@ -44,6 +44,16 @@ const Login = () => {
           </div>
 
           <div className="mb-4">
+            <h1 className="mb-2">Full Name</h1>
+            <input
+              type="full name"
+              className="border border-white rounded-2xl w-full px-4 py-2 text-black"
+              placeholder="Enter your full name"
+            />
+          </div>
+
+
+          <div className="mb-4">
             <h1 className="mb-2">Email</h1>
             <input
               type="email"
@@ -52,8 +62,7 @@ const Login = () => {
             />
           </div>
 
-
-        <div className="mb-4 relative">
+          <div className="mb-4 relative">
             <h1 className="mb-2">Password</h1>
             <input
               type={passwordVisible ? "text" : "password"}
@@ -74,13 +83,13 @@ const Login = () => {
 
           <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">Forgot Password?</h1>
 
-          <button className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-6">
-            Sign In
+          <button className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-6" >
+            Sign Up
           </button>
 
-          <p className="text-center">Don't have an account?</p>
-          <button className="border border-white rounded-2xl w-full py-2 mt-4" onClick={goSignup}>
-            Create Account
+          <p className="text-center">Already an account?</p>
+          <button className="border border-white rounded-2xl w-full py-2 mt-4" onClick={GoSignIn}>
+            Sign In
           </button>
         </div>
       </div>
@@ -88,4 +97,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
