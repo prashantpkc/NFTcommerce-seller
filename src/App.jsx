@@ -7,18 +7,20 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/login";
 import Signup from "./components/signup/signup";
+import Profile from "./components/Profile/profile";
 
 const App = () => {
   return (
     <Router>
-        {/* <Layout/> */}
-      {/* <Header />  */}
+      
       <Routes>
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/login" element={<Login/>} />
-        <Route path="/Signup" element={<Signup/>}/>
+        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+
       </Routes>
-      {/* <Footer/> */}
+    
     </Router>
   );
 };

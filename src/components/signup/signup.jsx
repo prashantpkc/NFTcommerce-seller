@@ -133,11 +133,9 @@ const Signup = () => {
                 <FaEyeSlash className="text-gray-500" />
               )}
             </div>
-          </div>
+          </div><br/>
 
-          <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">
-            Forgot Password?
-          </h1>
+          {/* <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">Forgot Password?</h1> */}
 
           <button
             onClick={handleSignup}
