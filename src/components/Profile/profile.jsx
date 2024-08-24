@@ -7,7 +7,7 @@ const Profile = () => {
   return (
     <>
       <Layout>
-        <div className="mt-[140px]">
+        <div className="mt-[106px]">
             <EditProfile/>
             <ViewProfile/>
         </div>
