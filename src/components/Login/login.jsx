@@ -13,6 +13,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
 
+  console.log(status, "status")
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -22,7 +24,12 @@ const Login = () => {
       console.log(error);
       toast.error(error.error);
     }
-  }, [error]);
+
+    if (status === 'succeeded') {
+        toast.success("Logged in successful!"); // Add success message
+        navigate("/dashboard"); // Redirect on successful login
+      }
+  }, [error, status]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
