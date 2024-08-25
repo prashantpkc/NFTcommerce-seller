@@ -25,9 +25,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const CustomDot = (props) => {
-  const { cx, cy, payload } = props;
-
+const CustomDot = ({ cx, cy, payload }) => {
   if (payload.value > 0) {
     return (
       <svg
@@ -36,7 +34,6 @@ const CustomDot = (props) => {
         width={10}
         height={10}
         fill="#8884d8"
-        className="block text-white"
         stroke="none"
         viewBox="0 0 1024 1024"
       >
@@ -44,7 +41,6 @@ const CustomDot = (props) => {
       </svg>
     );
   }
-
   return null;
 };
 

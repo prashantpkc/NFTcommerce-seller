@@ -8,7 +8,7 @@ const Dashboard = () => {
     <Layout>
       {/* Main Content Area */}
       lorem100
-      <div className="flex flex-col flex-1 p-4 mt-14">
+      <div className="flex flex-col flex-1 p-4 mt-20">
         <Card />
       </div>
 

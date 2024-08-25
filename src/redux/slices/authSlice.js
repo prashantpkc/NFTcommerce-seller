@@ -3,8 +3,10 @@ import {
   login,
   register,
   googleAuth,
-  getUser as fetchUser,
-  editUser as updateUser,
+  getSeller as fetchSeller,
+  editSeller as updateSeller,
+  uploadProfilePic as uploadProfilePicApi,
+  uploadIdCard as uploadIdCardApi,
 } from "../apis/authApi";
 
 // Login thunk
@@ -55,28 +57,65 @@ export const googleAuthUser = createAsyncThunk(
   }
 );
 
-// Get user thunk
-export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
-  try {
-    const data = await fetchUser();
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(
-      error.response?.data || { message: "Failed to fetch user" }
-    );
-  }
-});
-
-// Edit user thunk
-export const editUser = createAsyncThunk(
-  "auth/editUser",
-  async (payload, thunkAPI) => {
+// Get seller thunk
+export const getSeller = createAsyncThunk(
+  "auth/getSeller",
+  async (_, thunkAPI) => {
     try {
-      const data = await updateUser(payload);
+      const data = await fetchSeller();
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data || { message: "Edit user failed" }
+        error.response?.data || { message: "Failed to fetch seller" }
+      );
+    }
+  }
+);
+
+// Edit seller thunk
+export const editSeller = createAsyncThunk(
+  "auth/editSeller",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await updateSeller(payload);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || { message: "Edit seller failed" }
+      );
+    }
+  }
+);
+
+// Upload profile pic thunk
+export const uploadProfilePic = createAsyncThunk(
+  "auth/uploadProfilePic",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await uploadProfilePicApi(payload);
+      // Trigger getSeller after successful upload
+      thunkAPI.dispatch(getSeller());
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || { message: "Upload profile picture failed" }
+      );
+    }
+  }
+);
+
+// Upload ID card thunk
+export const uploadIdCard = createAsyncThunk(
+  "auth/uploadIdCard",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await uploadIdCardApi(payload);
+      // Trigger getSeller after successful upload
+      thunkAPI.dispatch(getSeller());
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || { message: "Upload ID card failed" }
       );
     }
   }
@@ -90,6 +129,10 @@ const authSlice = createSlice({
     token: localStorage.getItem("access_token") || null,
     status: "idle",
     error: null,
+    uploadStatus: {
+      profilePic: "idle",
+      idCard: "idle",
+    },
   },
   reducers: {
     logout(state) {
@@ -100,6 +143,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Login cases
       .addCase(loginUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -113,6 +157,8 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      
+      // Signup cases
       .addCase(signupUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -126,6 +172,8 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      
+      // Google Auth cases
       .addCase(googleAuthUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -139,28 +187,60 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(getUser.pending, (state) => {
+      
+      // Get Seller cases
+      .addCase(getSeller.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getSeller.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload.data;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(getSeller.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(editUser.pending, (state) => {
+      
+      // Edit Seller cases
+      .addCase(editSeller.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(editUser.fulfilled, (state, action) => {
+      .addCase(editSeller.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload.data;
       })
-      .addCase(editUser.rejected, (state, action) => {
+      .addCase(editSeller.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
+      })
+      
+      // Upload Profile Pic cases
+      .addCase(uploadProfilePic.pending, (state) => {
+        state.uploadStatus.profilePic = "loading";
+        state.error = null;
+      })
+      .addCase(uploadProfilePic.fulfilled, (state, action) => {
+        state.uploadStatus.profilePic = "succeeded";
+        state.user.profile_pic = action.payload.data; // Assuming response has profile_pic
+      })
+      .addCase(uploadProfilePic.rejected, (state, action) => {
+        state.uploadStatus.profilePic = "failed";
+        state.error = action.payload;
+      })
+      
+      // Upload ID Card cases
+      .addCase(uploadIdCard.pending, (state) => {
+        state.uploadStatus.idCard = "loading";
+        state.error = null;
+      })
+      .addCase(uploadIdCard.fulfilled, (state, action) => {
+        state.uploadStatus.idCard = "succeeded";
+        state.user.idCard = action.payload.data; // Assuming response has idCard
+      })
+      .addCase(uploadIdCard.rejected, (state, action) => {
+        state.uploadStatus.idCard = "failed";
         state.error = action.payload;
       });
   },

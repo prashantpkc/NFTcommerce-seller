@@ -1,7 +1,5 @@
 import { BASE_URL } from "../../../baseUrl"; // Adjust the path as needed
 import axios from "axios";
-const token = localStorage.getItem("access_token"); // Corrected the token name
-console.log(token, "token")
 
 // Create an Axios instance with default settings
 const api = axios.create({
@@ -39,9 +37,10 @@ export const googleAuth = async (payload) => {
   }
 };
 
-export const getUser = async () => {
+export const getSeller = async () => {
   try {
-    const response = await api.get("/eseller/get-user", {
+    const token = localStorage.getItem("access_token"); // Corrected the token retrieval
+    const response = await api.get("/eseller/get-eseller", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -52,9 +51,10 @@ export const getUser = async () => {
   }
 };
 
-export const editUser = async (payload) => {
+export const editSeller = async (payload) => {
   try {
-    const response = await api.put("/eseller/edit-user", payload, {
+    const token = localStorage.getItem("access_token"); // Corrected the token retrieval
+    const response = await api.put("/eseller/edit-eseller", payload, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,14 +65,31 @@ export const editUser = async (payload) => {
   }
 };
 
-
-//address
-
-// Add a new address
-export const addAddress = async (payload) => {
+// Upload profile picture
+export const uploadProfilePic = async (payload) => {
   try {
-    const response = await api.post("/eseller/add-address", payload, {
+    const token = localStorage.getItem("access_token"); // Corrected the token retrieval
+
+    const response = await api.patch("/eseller/upload-profile-pic", payload, {
       headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Upload ID card
+export const uploadIdCard = async (payload) => {
+  try {
+    const token = localStorage.getItem("access_token"); // Corrected the token retrieval
+
+    const response = await api.patch("/eseller/upload-id-card", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
