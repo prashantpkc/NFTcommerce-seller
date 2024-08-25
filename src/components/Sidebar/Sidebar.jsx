@@ -83,12 +83,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 w-[75%] sm:w-[20%] h-screen px-5 py-3 z-20 transition-transform duration-300 ease-in-out transform ${
+        className={`fixed top-2 left-0 w-[75%] sm:w-[20%] h-screen px-5 py-3 z-20 transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } sm:translate-x-0`}
       >
         <div
-          className="h-full rounded-2xl p-2 shadow-inner overflow-y-auto"
+          className="h-[100%] rounded-2xl p-2 shadow-inner overflow-y-auto"
           style={cardStyle}
         >
           <div className="h-[10%] flex gap-2 sm:gap-5 flex-col justify-center items-center">
@@ -145,36 +145,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               </div>
             ))}
           </div>
-          <div className="h-[30%] flex flex-col justify-center items-center">
-            <div className="flex flex-col justify-center items-center">
-              <img
-                src="/wallet.svg"
-                alt="wallet"
-                className="w-10 h-10 sm:w-12 sm:h-12"
-              />
-              <p
-                className={`text-xs sm:text-sm font-semibold ${
-                  isDarkEnabled ? "text-[#5E72E4]" : "text-[#140e69]"
-                }`}
-              >
-                ₹{total}
-              </p>
-              <p
-                className="text-xs sm:text-sm font-semibold"
-                style={{ color: colors.text }}
-              >
-                Wallet Amount
-              </p>
-            </div>
-            <div className="w-full flex flex-col gap-2 mt-2">
-              <div className="w-full h-8 sm:h-10 bg-[#344767] text-[#fff] rounded-lg flex justify-center items-center text-xs sm:text-sm">
-                Documentation
-              </div>
-              <div className="w-full h-8 sm:h-10 bg-[#070a68] text-[#fff] rounded-lg flex justify-center items-center text-xs sm:text-sm">
-                Upgrade to Pro
-              </div>
-            </div>
-          </div>
+         
         </div>
       </div>
     </>

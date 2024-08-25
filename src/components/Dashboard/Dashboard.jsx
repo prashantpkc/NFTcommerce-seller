@@ -7,8 +7,7 @@ const Dashboard = () => {
   return (
     <Layout>
       {/* Main Content Area */}
-      lorem100
-      <div className="flex flex-col flex-1 p-4 mt-20">
+      <div className="flex flex-col flex-1 p-4 mt-24">
         <Card />
       </div>
 

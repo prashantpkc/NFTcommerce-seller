@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { FaArrowLeft, FaBars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../Sidebar/Sidebar"; // Import your Sidebar component
+import Sidebar from "../Sidebar/Sidebar";
+import Drawer from "../Drawer/Drawer"; // Ensure this path is correct
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for Drawer
   const navigate = useNavigate();
   const sellerData = {
-    name: "Prashant", // Replace this with your dummy seller data
+    name: "Prashant",
   };
 
   const handleSettingClick = () => {
-    console.log("Settings clicked");
+    setIsDrawerOpen(true); // Open Drawer when Settings is clicked
   };
 
   const goDashboard = () => {
@@ -25,6 +27,10 @@ const Header = () => {
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false); // Function to close the Drawer
   };
 
   return (
@@ -62,6 +68,9 @@ const Header = () => {
       {isSidebarOpen && (
         <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />
       )}
+
+      {/* Conditionally render the Drawer */}
+      {isDrawerOpen && <Drawer open={isDrawerOpen} onClose={closeDrawer} />}
     </>
   );
 };
