@@ -8,6 +8,8 @@ import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/login";
 import Signup from "./components/signup/signup";
 import Profile from "./components/Profile/profile";
+import AddProduct from "./components/AddProduct/AddProduct";
+import Products from "./components/Products/Products";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/add-product" element={<AddProduct />}/>
+        <Route path="/your-products" element={<Products />}/>
 
       </Routes>
     

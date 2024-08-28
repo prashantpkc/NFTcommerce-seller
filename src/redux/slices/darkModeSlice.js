@@ -9,7 +9,7 @@ const darkSlice = createSlice({
   initialState,
   reducers: {
     setDark(state) {
-      state.dark = true;
+      state.dark = true;  
     },
     removeDark(state) {
       state.dark = false;

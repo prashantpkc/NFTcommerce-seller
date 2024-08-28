@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Dashboard as DashboardIcon,
   Add as AddIcon,
@@ -8,18 +9,20 @@ import {
   Person as PersonIcon,
   Logout as LogoutIcon,
   ArrowForward as ArrowForwardIcon,
-  Menu as MenuIcon, // Importing the menu icon for the toggle button
 } from "@mui/icons-material";
 
-const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+const Sidebar = ({ isSidebarOpen }) => {
   const navigate = useNavigate();
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
+  const navbg = useSelector((state) => state.sidebarbg?.color); // Retrieve color from Redux
+  const isSidebarDarkEnabled = useSelector((state) => state.sidebarDarkMode.isSidebarDark);
 
-  const isDarkEnabled = false; // Example: hardcoded or from context
-  const nevbg = "#f0f0f0"; // Example: hardcoded or from context
+  console.log(navbg, "navbg"); // Debugging output
+
   const colors = {
-    cardBg: "#ffffff",
-    borderColor: "#dddddd",
-    text: "#000000",
+    cardBg: isDarkEnabled ? "#1a1a1a" : "#ffffff",
+    borderColor: isDarkEnabled ? "#333333" : "#dddddd",
+    text: isDarkEnabled ? "#ffffff" : "#000000",
   };
 
   const soltArt = [{ price: 100 }, { price: 150 }];
@@ -42,12 +45,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     {
       icon: <AddIcon fontSize="small" />,
       link: "Add Product",
-      href: "/art-and-music",
+      href: "/add-product",
     },
     {
       icon: <MusicNoteIcon fontSize="small" />,
       link: "Your Product",
-      href: "/list-art-and-music",
+      href: "/your-products",
     },
     {
       icon: <ShoppingBagIcon fontSize="small" />,
@@ -71,7 +74,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       localStorage.clear();
     }
     navigate(href);
-    toggleSidebar(); // Close sidebar on link click
   };
 
   const cardStyle = {
@@ -80,75 +82,83 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     color: colors.text,
   };
 
+  const activeLinkStyle = {
+    backgroundColor: isSidebarDarkEnabled ? "#192555" : navbg || "#f5f5f5",
+    color: colors.text,
+  };
+
   return (
-    <>
+    <div
+      className={`fixed top-2 left-0 w-[75%] sm:w-[20%] h-screen px-5 py-3 z-20 transition-transform duration-300 ease-in-out transform ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } sm:translate-x-0`}
+    >
       <div
-        className={`fixed top-2 left-0 w-[75%] sm:w-[20%] h-screen px-5 py-3 z-20 transition-transform duration-300 ease-in-out transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
+        className="h-[100%] rounded-2xl p-2 shadow-inner overflow-y-auto"
+        style={cardStyle}
       >
-        <div
-          className="h-[100%] rounded-2xl p-2 shadow-inner overflow-y-auto"
-          style={cardStyle}
-        >
-          <div className="h-[10%] flex gap-2 sm:gap-5 flex-col justify-center items-center">
-            <div className="flex gap-2">
-              <ShoppingBagIcon fontSize="large" color="primary" />
-              <p
-                className="text-base sm:text-lg font-semibold"
-                style={{ color: colors.text }}
-              >
-                Seller Dashboard
-              </p>
-            </div>
-            <div className="w-full">
-              <hr
-                className="w-full"
-                style={{
-                  backgroundColor: isDarkEnabled ? "gray" : "lightgray",
-                  height: "1px",
-                  border: "none",
-                }}
+        <div className="h-[10%] flex gap-2 sm:gap-5 flex-col justify-center items-center">
+          <div className="flex gap-2">
+            <ShoppingBagIcon fontSize="large" color="primary" />
+            <p
+              className={`text-base sm:text-lg font-semibold ${
+                isDarkEnabled ? "text-white" : "text-green-500"
+              }`}
+            >
+              Seller Dashboard
+            </p>
+          </div>
+          <div className="w-full">
+            <hr
+              className="w-full"
+              style={{
+                backgroundColor: isDarkEnabled ? "gray" : "lightgray",
+                height: "1px",
+                border: "none",
+              }}
+            />
+          </div>
+        </div>
+        <div className="h-3/5 py-2">
+          {sideBarLink.map((item, index) => (
+            <div
+              className={`h-10 sm:h-12 rounded-xl px-2 flex justify-between items-center cursor-pointer mb-1 ${
+                item.href === window.location.pathname
+                  ? isDarkEnabled
+                    ? "bg-[#192555] shadow-inner"
+                    : `bg-[${navbg}] shadow-inner`
+                  : ""
+              }`}
+              key={index}
+              onClick={() => handleLinkClick(item.href, item.link)}
+              style={
+                item.href === window.location.pathname
+                  ? activeLinkStyle
+                  : {}
+              }
+            >
+              <div className="flex items-baseline gap-2 sm:gap-3">
+                {item.icon}
+                <p
+                  className={`text-sm sm:text-base ${
+                    item.href === window.location.pathname
+                      ? "font-semibold"
+                      : ""
+                  }`}
+                  style={{ color: colors.text }}
+                >
+                  {item.link}
+                </p>
+              </div>
+              <ArrowForwardIcon
+                fontSize="small"
+                style={{ color: isDarkEnabled ? "gray" : "black" }}
               />
             </div>
-          </div>
-          <div className="h-3/5 py-2">
-            {sideBarLink.map((item, index) => (
-              <div
-                className={`${
-                  item.href === window.location.pathname
-                    ? isDarkEnabled
-                      ? "bg-[#192555] shadow-inner"
-                      : `bg-[${nevbg}] shadow-inner`
-                    : ""
-                } h-10 sm:h-12 rounded-xl px-2 flex justify-between items-center cursor-pointer mb-1`}
-                key={index}
-                onClick={() => handleLinkClick(item.href, item.link)}
-              >
-                <div className="flex items-baseline gap-2 sm:gap-3">
-                  {item.icon}
-                  <p
-                    className={`text-sm sm:text-base ${
-                      item.href === window.location.pathname
-                        ? "font-semibold"
-                        : ""
-                    }`}
-                    style={{ color: colors.text }}
-                  >
-                    {item.link}
-                  </p>
-                </div>
-                <ArrowForwardIcon
-                  fontSize="small"
-                  style={{ color: isDarkEnabled ? "gray" : "black" }}
-                />
-              </div>
-            ))}
-          </div>
-         
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
