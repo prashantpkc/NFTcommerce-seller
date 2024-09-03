@@ -37,7 +37,7 @@ const Header = () => {
     <>
       <div className="w-full bg-gradient-to-r from-[#0A0D75] to-[#0D1380] border-b border-gray-800 flex items-center justify-between px-8 py-4 fixed top-0 right-0 z-10 h-28 shadow-md">
         {/* Left Section */}
-        <div className="flex items-center space-x-6 ml-[20%]">
+        <div className="flex items-center space-x-6 ml-0 md:ml-[20%]">
           <FaArrowLeft
             onClick={goDashboard}
             className="text-white cursor-pointer hover:text-gray-300 transition duration-300"

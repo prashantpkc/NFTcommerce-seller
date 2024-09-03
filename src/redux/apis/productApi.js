@@ -5,15 +5,18 @@ import axios from "axios";
 const api = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
   },
 });
 
-// Authentication API request functions
+// Create Product API request function
 export const createProductApi = async (payload) => {
   try {
-    const response = await api.post("/eproduct/create-product", payload);
+    const response = await api.post("/eproduct/create-product", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     // Extract and throw a more detailed error message if available
@@ -30,5 +33,4 @@ export const getSellerProductsApi = async () => {
       // Extract and throw a more detailed error message if available
       throw error.response?.data || error.message;
     }
-  };
-  
+};

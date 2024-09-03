@@ -14,13 +14,13 @@ const Layout = ({ children }) => {
         <Sidebar />
         
         {/* Main Content Area */}
-        <main className="flex-1 ml-[20%] p-4">
+        <main className="flex-1 ml-0 md:ml-[20%] p-4">
           {children}
         </main>
       </div>
       
       {/* Footer */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
