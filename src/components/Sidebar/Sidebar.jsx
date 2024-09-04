@@ -54,8 +54,8 @@ const Sidebar = ({ isSidebarOpen }) => {
     },
     {
       icon: <ShoppingBagIcon fontSize="small" />,
-      link: "Buyer",
-      href: "/buyer",
+      link: "Purchased Products",
+      href: "/purchased-product",
     },
     {
       icon: <PersonIcon fontSize="small" />,

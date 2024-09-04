@@ -34,3 +34,14 @@ export const getSellerProductsApi = async () => {
       throw error.response?.data || error.message;
     }
 };
+
+// API request function to get sold products for a specific seller
+export const getSoldCoursesBySellerApi = async () => {
+  try {
+    const response = await api.get("/eseller/get-sold-courses-by-seller");
+    return response.data;
+  } catch (error) {
+    // Extract and throw a more detailed error message if available
+    throw error.response?.data || error.message;
+  }
+};
