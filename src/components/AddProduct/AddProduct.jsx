@@ -6,6 +6,7 @@ import { createProductThunk } from "../../redux/slices/productSlice";
 const AddProduct = () => {
   const dispatch = useDispatch();
   const fileInputColorImagesRef = useRef(null);
+  const [colors, setColors] = useState([]);
 
   const [productData, setProductData] = useState({
     name: "",
@@ -21,13 +22,24 @@ const AddProduct = () => {
   const [currentColor, setCurrentColor] = useState("");
   const [currentColorImages, setCurrentColorImages] = useState([]);
   const [currentSizes, setCurrentSizes] = useState([]);
+  const [previewColors, setPreviewColors] = useState([]);
 
-  const colorOptions = ["Red", "Blue", "Green", "Black", "White"];
+  // Options for dropdowns
+  const colorOptions = [
+    "Red",
+    "Black",
+    "Green",
+    "Pink",
+    "Orange",
+    "Blue",
+    "Yellow",
+    "White",
+  ];
   const sizeOptions = ["S", "M", "L", "XL", "XXL"];
   const categoryOptions = ["Shirt", "Jeans", "Pant", "T-Shirt", "All"];
   const fabricOptions = ["Cotton", "Denim", "Polyester", "All"];
   const genderOptions = ["Men", "Women", "All"];
-  const patternOptions = ["Solid", "Striped", "All"];
+  const patternOptions = ["Solid", "Striped", "Printed", "All"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,8 +76,8 @@ const AddProduct = () => {
     ) {
       const newItem = {
         color: currentColor,
+        colorImages: currentColorImages,
         sizes: currentSizes,
-        // colorImages: currentColorImages,
       };
 
       setProductData((prevData) => ({
@@ -73,18 +85,19 @@ const AddProduct = () => {
         items: [...prevData.items, newItem],
       }));
 
+      // Add to preview
+      setPreviewColors((prevColors) => [...prevColors, newItem]);
+
       // Reset the input fields
       setCurrentColor("");
       setCurrentColorImages([]);
       setCurrentSizes([]);
-    } else {
-      alert("Please fill in all fields for the color before adding.");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (
       !productData.name ||
       !productData.price ||
@@ -93,7 +106,7 @@ const AddProduct = () => {
       alert("Please fill in all required fields.");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("name", productData.name);
     formData.append("gender", productData.gender);
@@ -102,19 +115,19 @@ const AddProduct = () => {
     formData.append("pattern", productData.pattern);
     formData.append("description", productData.description);
     formData.append("price", productData.price);
-  
+
     // Append items data as a JSON string
     formData.append("items", JSON.stringify(productData.items));
-  
+
     // Append color image URLs separately
     productData.items.forEach((item) => {
       item.colorImages.forEach((file) => {
         formData.append("colorImageUrl", file);
       });
     });
-  
+
     console.log("Final product data being submitted:", productData);
-  
+
     dispatch(createProductThunk(formData))
       .then((response) => {
         console.log("Product created successfully:", response);
@@ -124,7 +137,6 @@ const AddProduct = () => {
         console.error("Error creating product:", error);
       });
   };
-  
 
   const handleImageClick = () => {
     fileInputColorImagesRef.current?.click();
@@ -181,14 +193,20 @@ const AddProduct = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
                 </label>
-                <input
-                  type="text"
+                <select
                   name="category"
                   value={productData.category}
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                >
+                  <option value="">Select Category</option>
+                  {categoryOptions.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Fabric */}
@@ -196,14 +214,20 @@ const AddProduct = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Fabric
                 </label>
-                <input
-                  type="text"
+                <select
                   name="fabric"
                   value={productData.fabric}
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                >
+                  <option value="">Select Fabric</option>
+                  {fabricOptions.map((fabric) => (
+                    <option key={fabric} value={fabric}>
+                      {fabric}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Pattern */}
@@ -211,28 +235,20 @@ const AddProduct = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Pattern
                 </label>
-                <input
-                  type="text"
+                <select
                   name="pattern"
                   value={productData.pattern}
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
-              </div>
-
-              {/* Description */}
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={productData.description}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
+                >
+                  <option value="">Select Pattern</option>
+                  {patternOptions.map((pattern) => (
+                    <option key={pattern} value={pattern}>
+                      {pattern}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Price */}
@@ -250,7 +266,7 @@ const AddProduct = () => {
                 />
               </div>
 
-              {/* Color and Size Management */}
+              {/* Color */}
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Color
@@ -269,29 +285,57 @@ const AddProduct = () => {
                 </select>
               </div>
 
+              {/* Color Images */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Color Images
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleColorImageUpload}
+                  ref={fileInputColorImagesRef}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={handleImageClick}
+                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Upload Color Images
+                </button>
+              </div>
+
               {/* Sizes */}
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sizes
                 </label>
+
                 {currentSizes.map((size, index) => (
-                  <div key={index} className="flex space-x-4 mb-4">
-                    <input
-                      type="text"
+                  <div key={index} className="flex gap-4 mb-4">
+                    <select
                       name="size"
                       value={size.size}
                       onChange={(e) => handleSizeChange(e, index)}
-                      placeholder="Size"
-                      className="w-1/2 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="border border-gray-300 rounded-lg p-3 w-1/2"
                       required
-                    />
+                    >
+                      <option value="">Select Size</option>
+                      {sizeOptions.map((sizeOption) => (
+                        <option key={sizeOption} value={sizeOption}>
+                          {sizeOption}
+                        </option>
+                      ))}
+                    </select>
                     <input
                       type="number"
                       name="stock"
                       value={size.stock}
                       onChange={(e) => handleSizeChange(e, index)}
                       placeholder="Stock"
-                      className="w-1/2 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="border border-gray-300 rounded-lg p-3 w-1/2"
                       required
                     />
                   </div>
@@ -299,59 +343,63 @@ const AddProduct = () => {
                 <button
                   type="button"
                   onClick={addSize}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Add Size
                 </button>
               </div>
 
-              {/* Color Images */}
+              {/* Add Color Button */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Color Images
-                </label>
                 <button
                   type="button"
-                  onClick={handleImageClick}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  onClick={addColor}
+                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Upload Images
+                  Add Color
                 </button>
-                <input
-                  type="file"
-                  ref={fileInputColorImagesRef}
-                  onChange={handleColorImageUpload}
-                  multiple
-                  accept="image/*"
-                  className="hidden"
-                />
-                <div className="mt-4">
-                  {currentColorImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={URL.createObjectURL(image)}
-                      alt={`Color preview ${index + 1}`}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                  ))}
-                </div>
               </div>
+            </div>
 
-              {/* Add Color Button */}
-              <button
-                type="button"
-                onClick={addColor}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg"
-              >
-                Add Color
-              </button>
+            {/* Color Previews */}
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Color Previews</h2>
+              {previewColors.map((colorItem, index) => (
+                <div
+                  key={index}
+                  className="mb-6 border border-gray-300 p-4 rounded-lg"
+                >
+                  <h3 className="text-lg font-medium mb-2">
+                    Color: {colorItem.color}
+                  </h3>
+                  <div className="flex flex-wrap gap-4 mb-4">
+                    {colorItem.colorImages.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        src={URL.createObjectURL(image)}
+                        alt={`Color ${colorItem.color} Image ${imgIndex + 1}`}
+                        className="w-24 h-24 object-cover"
+                      />
+                    ))}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Sizes & Stock</h4>
+                    {colorItem.sizes.map((size, sizeIndex) => (
+                      <div key={sizeIndex} className="mb-2">
+                        <span className="font-medium">{size.size}: </span>
+                        <span>{size.stock} in stock</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Submit Button */}
-            <div className="text-center mt-8">
+            <div className="relative">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold"
+                className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Submit Product
               </button>
