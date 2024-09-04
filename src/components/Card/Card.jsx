@@ -1,36 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSellerCardSummary } from "../../redux/slices/cardSlice";
 
 export const Card = () => {
-  // Dummy data
-  const dummySoltArt = [
-    { price: 100, createdAt: "2024-08-21T00:00:00Z" },
-    { price: 150, createdAt: "2024-08-20T00:00:00Z" }
-  ];
+  const dispatch = useDispatch();
+  const { summaryData, loading, error } = useSelector((state) => state.card);
 
-  const dummySoltMusic = [
-    { price: 200, createdAt: "2024-08-21T00:00:00Z" },
-    { price: 250, createdAt: "2024-08-19T00:00:00Z" }
-  ];
+  console.log(summaryData, "data")
 
-  // Calculate total revenue
-  const total = [...dummySoltArt, ...dummySoltMusic].reduce(
-    (acc, data) => acc + data.price,
-    0
-  );
+  useEffect(() => {
+    dispatch(fetchSellerCardSummary());
+  }, [dispatch]);
 
-  // Calculate today's revenue
-  const todays = (() => {
-    const currentDate = new Date();
-    const filteredData = [...dummySoltArt, ...dummySoltMusic].filter((item) => {
-      const itemDate = new Date(item.createdAt);
-      return (
-        itemDate.getFullYear() === currentDate.getFullYear() &&
-        itemDate.getMonth() === currentDate.getMonth() &&
-        itemDate.getDate() === currentDate.getDate()
-      );
-    });
-    return filteredData.reduce((acc, data) => acc + data.price, 0);
-  })();
+  // Check if data is available and has necessary fields
+  const totalSoldItems = summaryData?.data?.totalSoldItems || 0;
+  const totalRevenue = summaryData?.data?.totalRevenue || 0;
+  const todayRevenue = summaryData?.data?.todayRevenue || 0;
+  const totalBuyers = summaryData?.data?.totalBuyers || 0;
 
   // Static card styling
   const cardStyle = {
@@ -38,6 +24,9 @@ export const Card = () => {
     border: "1px solid #ddd",    // Example border color
     color: "#333",               // Example text color
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="w-full flex flex-wrap justify-between gap-3">
@@ -47,8 +36,8 @@ export const Card = () => {
       >
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <p className="text-sm font-semibold">Total Art</p>
-            <p className="text-xl font-bold">{dummySoltArt.length}</p>
+            <p className="text-sm font-semibold">Total Sold Items</p>
+            <p className="text-xl font-bold">{totalSoldItems}</p>
           </div>
         </div>
         <div className="flex">
@@ -63,8 +52,8 @@ export const Card = () => {
       >
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <p className="text-sm font-semibold">Total Music</p>
-            <p className="text-xl font-bold">{dummySoltMusic.length}</p>
+            <p className="text-sm font-semibold">Total Buyers</p>
+            <p className="text-xl font-bold">{totalBuyers}</p>
           </div>
         </div>
         <div className="flex">
@@ -80,7 +69,7 @@ export const Card = () => {
         <div className="flex justify-between">
           <div className="flex flex-col">
             <p className="text-sm font-semibold">Total Revenue</p>
-            <p className="text-xl font-bold">₹{total}</p>
+            <p className="text-xl font-bold">₹{totalRevenue.toFixed(2)}</p>
           </div>
         </div>
         <div className="flex">
@@ -95,8 +84,8 @@ export const Card = () => {
       >
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <p className="text-sm font-semibold">Today&apos;s Revenue</p>
-            <p className="text-xl font-bold">₹{todays}</p>
+            <p className="text-sm font-semibold">Today's Revenue</p>
+            <p className="text-xl font-bold">₹{todayRevenue.toFixed(2)}</p>
           </div>
         </div>
         <div className="flex">

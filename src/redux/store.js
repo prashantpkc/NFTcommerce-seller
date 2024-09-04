@@ -5,6 +5,7 @@ import navfixedReducer from "./slices/navfixedSlice";
 import sidebarNavColorReducer from "./slices/sidebarNavColorSlice";
 import sidebarDarkModeReducer from "./slices/sidebarDarkModeSlice";
 import productReducer from "./slices/productSlice"; // Importing product slice reducer
+import cardReducer from "./slices/cardSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     sidebarbg: sidebarNavColorReducer,   // Manages sidebar background color
     product: productReducer,             // Manages product-related state
     sidebarDarkMode: sidebarDarkModeReducer, // Manages sidebar dark mode state
+    card: cardReducer,
   },
 });
 

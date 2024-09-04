@@ -44,55 +44,55 @@ const CustomDot = ({ cx, cy, payload }) => {
   return null;
 };
 
-// Dummy data
-const dummyArtData = [
-  { createdAt: "2024-01-15T00:00:00Z" },
-  { createdAt: "2024-02-20T00:00:00Z" },
-  // Add more dummy data as needed
-];
-
-const dummyMusicData = [
-  { createdAt: "2024-01-10T00:00:00Z" },
-  { createdAt: "2024-03-25T00:00:00Z" },
-  // Add more dummy data as needed
-];
-
-const SalesChart = ({ isDarkEnabled, year }) => {
+const SalesChart = ({ data, year }) => {
   const [filteredData, setFilteredData] = useState([]);
 
-  const lineColorArt = isDarkEnabled ? "#5E72E4" : "#5E72E4";
-  const lineColorMusic = isDarkEnabled ? "#82ca9d" : "#82ca9d";
-  const gridColor = isDarkEnabled ? "#D3D3D3" : "#e0e0e0";
-  const axisColor = isDarkEnabled ? "#D3D3D3" : "#333";
-  const legendTextColor = isDarkEnabled ? "#D3D3D3" : "#000";
+  const lineColorItems = "#5E72E4"; // Color for items line
+  const lineColorRevenue = "#82ca9d"; // Color for revenue line
+  const gridColor = "#e0e0e0";
+  const axisColor = "#333";
+  const legendTextColor = "#000";
 
   useEffect(() => {
     filterData();
-  }, [year]);
+  }, [data, year]);
 
   const filterData = () => {
-    const filteredArt = dummyArtData.filter(item =>
-      moment(item.createdAt).year() === year
-    );
+    if (typeof data !== 'object' || data === null) {
+      console.error('Expected data to be an object but got:', data);
+      return;
+    }
 
-    const filteredMusic = dummyMusicData.filter(item =>
-      moment(item.createdAt).year() === year
-    );
+    // Map month names to indices
+    const monthMap = {
+      jan: 0,
+      feb: 1,
+      mar: 2,
+      apr: 3,
+      may: 4,
+      jun: 5,
+      jul: 6,
+      aug: 7,
+      sep: 8,
+      oct: 9,
+      nov: 10,
+      dec: 11,
+    };
 
+    // Initialize monthly data array
     const monthlyData = Array.from({ length: 12 }, (_, i) => ({
       name: moment().month(i).format("MMM"),
-      art: 0,
-      music: 0,
+      items: 0,
+      revenue: 0,
     }));
 
-    filteredArt.forEach(item => {
-      const month = moment(item.createdAt).month();
-      monthlyData[month].art += 1;
-    });
-
-    filteredMusic.forEach(item => {
-      const month = moment(item.createdAt).month();
-      monthlyData[month].music += 1;
+    // Update monthly data based on the provided data object
+    Object.keys(data).forEach(monthKey => {
+      const monthIndex = monthMap[monthKey.toLowerCase()];
+      if (monthIndex !== undefined) {
+        monthlyData[monthIndex].items = data[monthKey].totalSoldItems || 0;
+        monthlyData[monthIndex].revenue = data[monthKey].totalRevenue || 0;
+      }
     });
 
     setFilteredData(monthlyData);
@@ -107,7 +107,7 @@ const SalesChart = ({ isDarkEnabled, year }) => {
               dx="0"
               dy="4"
               stdDeviation="4"
-              floodColor={lineColorArt}
+              floodColor={lineColorItems}
               floodOpacity="0.8"
             />
           </filter>
@@ -119,18 +119,18 @@ const SalesChart = ({ isDarkEnabled, year }) => {
         <Legend wrapperStyle={{ color: legendTextColor }} />
         <Line
           type="monotone"
-          dataKey="art"
-          name="Art"
-          stroke={lineColorArt}
+          dataKey="items"
+          name="Items Sold"
+          stroke={lineColorItems}
           strokeWidth={3}
           dot={<CustomDot />}
           filter="url(#shadow)"
         />
         <Line
           type="monotone"
-          dataKey="music"
-          name="Music"
-          stroke={lineColorMusic}
+          dataKey="revenue"
+          name="Revenue"
+          stroke={lineColorRevenue}
           strokeWidth={3}
           dot={<CustomDot />}
         />
