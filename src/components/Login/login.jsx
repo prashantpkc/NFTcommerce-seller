@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , FormEvent} from "react";
 import image2 from "./image2.png";
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -19,17 +19,17 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-      toast.error(error.error);
-    }
+  // useEffect(() => {
+  //   if (error) {
+  //     console.log(error);
+  //     toast.error(error.error);
+  //   }
 
-    if (status === 'succeeded') {
-        toast.success("Logged in successful!"); // Add success message
-        navigate("/dashboard"); // Redirect on successful login
-      }
-  }, [error, status]);
+  //   if (status === 'succeeded') {
+  //       toast.success("Logged in successful!");
+  //       navigate("/dashboard"); 
+  //     }
+  // }, []);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -38,8 +38,18 @@ const Login = () => {
   const goSignup = () => {
     navigate("/Signup");
   };
-  const handleLogin = () => {
-    dispatch(loginUser({ email, password }));
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+     const result =  dispatch(loginUser({ email, password }));
+     console.log(result.payload)
+     if(result.payload?.success){
+      navigate("/dashboard"); 
+     }
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   const signWithGoogle = async () => {
@@ -73,7 +83,7 @@ const Login = () => {
 
       {/* Form container */}
       <div className="w-full lg:w-1/2 flex flex-col  items-center text-white px-8 ">
-        <div className="w-full max-w-md">
+        <form onSubmit={handleLogin} className="w-full max-w-md">
           <h1 className="font-bold text-3xl  mb-6 text-center lg:text-left">
             Welcome to CENTUMO NFT Marketplace
           </h1>
@@ -101,7 +111,7 @@ const Login = () => {
             <h1 className="mb-2">Email</h1>
             <input
               type="email"
-              className="border border-white rounded-2xl w-full px-4 py-2 text-black"
+              className="border outline-none border-white rounded-2xl w-full px-4 py-2 text-black"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -112,7 +122,7 @@ const Login = () => {
             <h1 className="mb-2">Password</h1>
             <input
               type={passwordVisible ? "text" : "password"}
-              className="border border-white rounded-2xl w-full px-4 py-2 text-black absolute"
+              className="border outline-none border-white rounded-2xl w-full px-4 py-2 text-black absolute"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -132,8 +142,9 @@ const Login = () => {
           {/* <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">Forgot Password?</h1> */}
 
           <button
+            type="submit"
             className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-6"
-            onClick={handleLogin}
+            // onClick={handleLogin}
           >
             Sign In
           </button>
@@ -145,7 +156,7 @@ const Login = () => {
           >
             Create Account
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

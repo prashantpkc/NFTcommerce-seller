@@ -96,7 +96,7 @@ const Signup = () => {
             <h1 className="mb-2">Full Name</h1>
             <input
               type="text"
-              className="border border-white rounded-2xl w-full px-4 py-2 text-black"
+              className="border outline-none border-white rounded-2xl w-full px-4 py-2 text-black"
               placeholder="Enter your full name"
               value={name} // Updated to use name
               onChange={(e) => setName(e.target.value)}
@@ -107,7 +107,7 @@ const Signup = () => {
             <h1 className="mb-2">Email</h1>
             <input
               type="email"
-              className="border border-white rounded-2xl w-full px-4 py-2 text-black"
+              className="border outline-none border-white rounded-2xl w-full px-4 py-2 text-black"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -117,8 +117,8 @@ const Signup = () => {
           <div className="mb-4 relative">
             <h1 className="mb-2">Password</h1>
             <input
-              type={passwordVisible ? "text" : "password"}
-              className="border border-white rounded-2xl w-full px-4 py-2 text-black"
+              type={!passwordVisible ? "text" : "password"}
+              className="border outline-none border-white rounded-2xl w-full px-4 py-2 text-black"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
