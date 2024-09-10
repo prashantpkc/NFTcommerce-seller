@@ -55,6 +55,8 @@ const SalesChart = ({ data, year }) => {
 
   useEffect(() => {
     filterData();
+    console.log("Filtered Data: ", filteredData);
+
   }, [data, year]);
 
   const filterData = () => {

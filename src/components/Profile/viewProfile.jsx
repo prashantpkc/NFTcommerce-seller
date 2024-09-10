@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSeller, uploadProfilePic, uploadIdCard } from "../../redux/slices/authSlice";
 import { toast } from "react-hot-toast";
+import { CleanHands } from "@mui/icons-material";
 
 const ViewProfile = () => {
   const dispatch = useDispatch();
@@ -12,10 +13,12 @@ const ViewProfile = () => {
     error: authError,
   } = useSelector((state) => state.auth);
 
+  console.log(user, "user")
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadType, setUploadType] = useState(null); // "profilePic" or "idCard"
-  const [profilePicPreview, setProfilePicPreview] = useState(user?.profile_pic);
-  const [idCardPreview, setIdCardPreview] = useState(user?.idCard);
+  const [profilePicPreview, setProfilePicPreview] = useState(user?.profile_pic || "");
+  const [idCardPreview, setIdCardPreview] = useState(user?.idCard || "");
   const fileInputProfilePicRef = useRef(null);
   const fileInputIdCardRef = useRef(null);
 
@@ -25,13 +28,16 @@ const ViewProfile = () => {
 
   useEffect(() => {
     if (authError) {
-      toast.error(authError.message || "An error occurred");
+      console.log(authError, "autherror");
+      toast.error(authError.error || "An error occurred");
     }
   }, [authError]);
 
   useEffect(() => {
-    setProfilePicPreview(user?.profile_pic);
-    setIdCardPreview(user?.idCard);
+    if (user) {
+      setProfilePicPreview(user.profile_pic || "");
+      setIdCardPreview(user.idCard || "");
+    }
   }, [user]);
 
   const handleFileInputChange = (event) => {
@@ -97,7 +103,7 @@ const ViewProfile = () => {
             <h2 className="text-lg font-semibold mb-4">Edit Profile Picture</h2>
             <div className="w-32 h-32 mb-4 relative">
               <img
-                src={profilePicPreview}
+                src={profilePicPreview || "default-profile-pic-url"} // Add default image URL if no preview
                 alt="Profile"
                 className="w-full h-full rounded-full object-cover cursor-pointer"
                 onClick={() => handleImageClick("profilePic")}
@@ -126,7 +132,7 @@ const ViewProfile = () => {
             <h2 className="text-lg font-semibold mb-4">Edit ID Card</h2>
             <div className="w-48 h-32 mb-4 relative">
               <img
-                src={idCardPreview}
+                src={idCardPreview || "default-id-card-url"} // Add default image URL if no preview
                 alt="ID Card"
                 className="w-full h-full object-cover rounded-md cursor-pointer"
                 onClick={() => handleImageClick("idCard")}
@@ -164,12 +170,12 @@ const ViewProfile = () => {
             <p className="mb-2">Pin Code</p>
           </div>
           <div className="lg:ml-[200px] mt-4 lg:mt-0">
-            <p className="mb-2">{user?.name}</p>
-            <p className="mb-2">{user?.email}</p>
-            <p className="mb-2">{user?.phone}</p>
-            <p className="mb-2">{user?.address}</p>
-            <p className="mb-2">{user?.country}</p>
-            <p className="mb-2">{user?.postalCode}</p>
+            <p className="mb-2">{user?.name || "N/A"}</p>
+            <p className="mb-2">{user?.email || "N/A"}</p>
+            <p className="mb-2">{user?.phone || "N/A"}</p>
+            <p className="mb-2">{user?.address || "N/A"}</p>
+            <p className="mb-2">{user?.country || "N/A"}</p>
+            <p className="mb-2">{user?.postalCode || "N/A"}</p>
           </div>
         </div>
       </div>

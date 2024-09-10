@@ -46,16 +46,21 @@ const Sidebar = ({ isSidebarOpen }) => {
     { icon: <PersonIcon fontSize="small" />, link: "Profile", href: "/profile" },
     { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/signup" },
   ];
-
   const handleLinkClick = (href, link) => {
     if (link === "Logout") {
       console.log("Logging out..."); // Debugging output
-      dispatch(logout()); // Dispatch the logout action
-      navigate(href); // Navigate to other links
-      // Adjust the delay if necessary
+  
+      // Perform logout actions such as clearing local storage or cookies if necessary
+      localStorage.removeItem("authToken"); // Example: remove token from localStorage
+  
+      // Navigate to the logout or login page
+      navigate("/signup");
     } else {
+      // Navigate to the selected link's href
+      navigate(href);
     }
   };
+  
 
   const cardStyle = {
     backgroundColor: colors.cardBg,

@@ -5,7 +5,6 @@ import { fetchSellerCardSummary } from "../../redux/slices/cardSlice";
 export const Card = () => {
   const dispatch = useDispatch();
   const { summaryData, loading, error } = useSelector((state) => state.card);
-
   console.log(summaryData, "data")
 
   useEffect(() => {
