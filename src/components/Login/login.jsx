@@ -39,9 +39,10 @@ const Login = () => {
     navigate("/Signup");
   };
   const handleLogin = async (e) => {
+    console.log("hello")
     e.preventDefault();
     try {
-     const result =  dispatch(loginUser({ email, password }));
+     const result = await dispatch(loginUser({ email, password }));
      console.log(result.payload)
      if(result.payload?.success){
       navigate("/dashboard"); 
