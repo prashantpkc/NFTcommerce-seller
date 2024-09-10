@@ -14,7 +14,7 @@ import {
 const Sidebar = ({ isSidebarOpen }) => {
   const navigate = useNavigate();
   const isDarkEnabled = useSelector((state) => state.darkmode.dark);
-  const navbg = useSelector((state) => state.sidebarbg?.color); // Retrieve color from Redux
+  const navbg = useSelector((state) => state.sidebarbg?.color);
   const isSidebarDarkEnabled = useSelector((state) => state.sidebarDarkMode.isSidebarDark);
 
   console.log(navbg, "navbg"); // Debugging output
@@ -37,43 +37,22 @@ const Sidebar = ({ isSidebarOpen }) => {
   }, [soltArt, soltMusic]);
 
   const sideBarLink = [
-    {
-      icon: <DashboardIcon fontSize="small" />,
-      link: "Dashboard",
-      href: "/dashboard",
-    },
-    {
-      icon: <AddIcon fontSize="small" />,
-      link: "Add Product",
-      href: "/add-product",
-    },
-    {
-      icon: <MusicNoteIcon fontSize="small" />,
-      link: "Your Product",
-      href: "/your-products",
-    },
-    {
-      icon: <ShoppingBagIcon fontSize="small" />,
-      link: "Purchased Products",
-      href: "/purchased-product",
-    },
-    {
-      icon: <PersonIcon fontSize="small" />,
-      link: "Profile",
-      href: "/profile",
-    },
-    {
-      icon: <LogoutIcon fontSize="small" />,
-      link: "Logout",
-      href: "/login",
-    },
+    { icon: <DashboardIcon fontSize="small" />, link: "Dashboard", href: "/dashboard" },
+    { icon: <AddIcon fontSize="small" />, link: "Add Product", href: "/add-product" },
+    { icon: <MusicNoteIcon fontSize="small" />, link: "Your Product", href: "/your-products" },
+    { icon: <ShoppingBagIcon fontSize="small" />, link: "Purchased Products", href: "/purchased-product" },
+    { icon: <PersonIcon fontSize="small" />, link: "Profile", href: "/profile" },
+    { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/" },
   ];
 
   const handleLinkClick = (href, link) => {
     if (link === "Logout") {
+      console.log("Logging out..."); // Debugging output
       localStorage.clear();
+      navigate("/"); // Redirect to home after logout
+    } else {
+      navigate(href);
     }
-    navigate(href);
   };
 
   const cardStyle = {
@@ -93,30 +72,16 @@ const Sidebar = ({ isSidebarOpen }) => {
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } sm:translate-x-0`}
     >
-      <div
-        className="h-[100%] rounded-2xl p-2 shadow-inner overflow-y-auto"
-        style={cardStyle}
-      >
+      <div className="h-[100%] rounded-2xl p-2 shadow-inner overflow-y-auto" style={cardStyle}>
         <div className="h-[10%] flex gap-2 sm:gap-5 flex-col justify-center items-center">
           <div className="flex gap-2">
             <ShoppingBagIcon fontSize="large" color="primary" />
-            <p
-              className={`text-base sm:text-lg font-semibold ${
-                isDarkEnabled ? "text-white" : "text-green-500"
-              }`}
-            >
+            <p className={`text-base sm:text-lg font-semibold ${isDarkEnabled ? "text-white" : "text-green-500"}`}>
               Seller Dashboard
             </p>
           </div>
           <div className="w-full">
-            <hr
-              className="w-full"
-              style={{
-                backgroundColor: isDarkEnabled ? "gray" : "lightgray",
-                height: "1px",
-                border: "none",
-              }}
-            />
+            <hr className="w-full" style={{ backgroundColor: isDarkEnabled ? "gray" : "lightgray", height: "1px", border: "none" }} />
           </div>
         </div>
         <div className="h-3/5 py-2">
@@ -131,29 +96,15 @@ const Sidebar = ({ isSidebarOpen }) => {
               }`}
               key={index}
               onClick={() => handleLinkClick(item.href, item.link)}
-              style={
-                item.href === window.location.pathname
-                  ? activeLinkStyle
-                  : {}
-              }
+              style={item.href === window.location.pathname ? activeLinkStyle : {}}
             >
               <div className="flex items-baseline gap-2 sm:gap-3">
                 {item.icon}
-                <p
-                  className={`text-sm sm:text-base ${
-                    item.href === window.location.pathname
-                      ? "font-semibold"
-                      : ""
-                  }`}
-                  style={{ color: colors.text }}
-                >
+                <p className={`text-sm sm:text-base ${item.href === window.location.pathname ? "font-semibold" : ""}`} style={{ color: colors.text }}>
                   {item.link}
                 </p>
               </div>
-              <ArrowForwardIcon
-                fontSize="small"
-                style={{ color: isDarkEnabled ? "gray" : "black" }}
-              />
+              <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} />
             </div>
           ))}
         </div>
