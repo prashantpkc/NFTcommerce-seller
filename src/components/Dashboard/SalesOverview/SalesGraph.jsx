@@ -57,7 +57,7 @@ const SalesGraph = () => {
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error.message}</p>}
       <div>
-        <SalesChart data={monthlyData.data} year={selectedYear} />
+        <SalesChart data={monthlyData?.data} year={selectedYear} />
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ const Signup = () => {
   };
 
   const GoSignIn = () => {
-    navigate("/Login");
+    navigate("/");
   };
 
   const handleSignup = () => {
