@@ -9,6 +9,6 @@ import store from "./redux/store.js";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <App />
-    <Toaster /> {/* Include Toaster here */}
+    <Toaster />
   </Provider>
 );
