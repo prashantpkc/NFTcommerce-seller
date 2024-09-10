@@ -33,9 +33,20 @@ const Signup = () => {
     navigate("/");
   };
 
-  const handleSignup = () => {
-    dispatch(signupUser({ email, password, name }));
+  const handleSignup = async () => {
+    try {
+      const authResult = await dispatch(signupUser({ email, password, name }));
+      // Assuming the signupUser action returns a result with a success property
+      if (authResult.payload?.success) {
+        toast.success("Signed up successfully!");
+        navigate("/dashboard"); // Redirect to dashboard on successful signup
+      } 
+    } catch (err) {
+      toast.error("An error occurred during signup");
+      console.error("Signup Error:", err);
+    }
   };
+  
 
   const signWithGoogle = async () => {
     try {
@@ -133,7 +144,8 @@ const Signup = () => {
                 <FaEyeSlash className="text-gray-500" />
               )}
             </div>
-          </div><br/>
+          </div>
+          <br />
 
           {/* <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">Forgot Password?</h1> */}
 

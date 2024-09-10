@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Dashboard as DashboardIcon,
   Add as AddIcon,
@@ -10,9 +10,11 @@ import {
   Logout as LogoutIcon,
   ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
+import { logout } from "../../redux/slices/authSlice"; // Adjust the import path
 
 const Sidebar = ({ isSidebarOpen }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const navbg = useSelector((state) => state.sidebarbg?.color);
   const isSidebarDarkEnabled = useSelector((state) => state.sidebarDarkMode.isSidebarDark);
@@ -42,16 +44,16 @@ const Sidebar = ({ isSidebarOpen }) => {
     { icon: <MusicNoteIcon fontSize="small" />, link: "Your Product", href: "/your-products" },
     { icon: <ShoppingBagIcon fontSize="small" />, link: "Purchased Products", href: "/purchased-product" },
     { icon: <PersonIcon fontSize="small" />, link: "Profile", href: "/profile" },
-    { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/" },
+    { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/signup" },
   ];
 
   const handleLinkClick = (href, link) => {
     if (link === "Logout") {
       console.log("Logging out..."); // Debugging output
-      localStorage.clear();
-      navigate("/"); // Redirect to home after logout
+      dispatch(logout()); // Dispatch the logout action
+      navigate(href); // Navigate to other links
+      // Adjust the delay if necessary
     } else {
-      navigate(href);
     }
   };
 
