@@ -90,11 +90,11 @@ const ViewProfile = () => {
   return (
     <div className="flex flex-col lg:flex-row text-white gap-6 lg:gap-8">
       {/* First Card */}
-      <div className="border border-blue-900 rounded-lg bg-gradient-to-t from-blue-600 to-blue-900 p-6 lg:w-[580px] w-full">
+      <div className="border bg-[#fff] rounded-2xl p-6 lg:w-[580px] w-full">
         <div className="flex flex-col lg:flex-row items-center">
           {/* Left Column - Profile Picture */}
           <div className="w-full lg:w-1/2 flex flex-col items-center mb-6 lg:mb-0">
-            <h2 className="text-lg font-semibold mb-4">Edit Profile Picture</h2>
+            <h2 className="text-lg font-semibold mb-4 text-[#131069]">Edit Profile Picture</h2>
             <div className="w-32 h-32 mb-4 relative">
               <img
                 src={profilePicPreview}
@@ -112,7 +112,7 @@ const ViewProfile = () => {
             </div>
             <button
               onClick={handleUpload}
-              className="px-12 py-1 bg-gradient-to-r from-sky-400 to-pink-500 text-white rounded shadow-lg"
+              className="px-12 py-1 bg-blue-600 text-white rounded shadow-lg"
             >
               Upload
             </button>
@@ -123,7 +123,7 @@ const ViewProfile = () => {
 
           {/* Right Column - ID Card */}
           <div className="w-full lg:w-1/2 flex flex-col items-center">
-            <h2 className="text-lg font-semibold mb-4">Edit ID Card</h2>
+            <h2 className="text-lg font-semibold mb-4 text-[#131069]">Edit ID Card</h2>
             <div className="w-48 h-32 mb-4 relative">
               <img
                 src={idCardPreview}
@@ -141,7 +141,7 @@ const ViewProfile = () => {
             </div>
             <button
               onClick={handleUpload}
-              className="px-12 py-1 bg-black text-white rounded shadow-lg"
+              className="px-12 py-1 bg-blue-600 text-white rounded shadow-lg"
             >
               Upload
             </button>
@@ -150,26 +150,26 @@ const ViewProfile = () => {
       </div>
 
       {/* Second Card */}
-      <div className="border border-blue-900 rounded-lg bg-gradient-to-t from-blue-600 to-blue-900 p-6 lg:w-[580px] w-full">
-        <h1 className="text-lg font-semibold">Seller Full Details</h1>
+      <div className="border bg-[#fff] p-6 lg:w-[580px] rounded-2xl w-full">
+        <h1 className="text-lg font-semibold text-[#131069]">Seller Full Details</h1>
         <hr className="mt-3 mb-6" />
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex justify-between items-baseline">
           <div>
-            <p className="mb-2">Full Name</p>
-            <p className="mb-2">Email</p>
-            <p className="mb-2">Phone</p>
-            <p className="mb-2">Address</p>
-            <p className="mb-2">Country</p>
-            <p className="mb-2">Pin Code</p>
+            <p className="mb-2 text-[#131069] ">Full Name</p>
+            <p className="mb-2 text-[#131069]">Email</p>
+            <p className="mb-2 text-[#131069]">Phone</p>
+            <p className="mb-2 text-[#131069]">Address</p>
+            <p className="mb-2 text-[#131069]">Country</p>
+            <p className="mb-2 text-[#131069]">Pin Code</p>
           </div>
           <div className="lg:ml-[200px] mt-4 lg:mt-0">
-            <p className="mb-2">{user?.name}</p>
-            <p className="mb-2">{user?.email}</p>
-            <p className="mb-2">{user?.phone}</p>
-            <p className="mb-2">{user?.address}</p>
-            <p className="mb-2">{user?.country}</p>
-            <p className="mb-2">{user?.postalCode}</p>
+            <p className="mb-2 text-[#131069]">{user?.name}</p>
+            <p className="mb-2 text-[#131069]">{user?.email}</p>
+            <p className="mb-2 text-[#131069]">{user?.phone}</p>
+            <p className="mb-2 text-[#131069]">{user?.address}</p>
+            <p className="mb-2 text-[#131069]">{user?.country}</p>
+            <p className="mb-2 text-[#131069]">{user?.postalCode}</p>
           </div>
         </div>
       </div>

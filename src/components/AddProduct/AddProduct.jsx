@@ -1,12 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Layout from "../Layout/Layout";
 import { createProductThunk } from "../../redux/slices/productSlice";
+import { BackIcon } from "../../assets/icon/Icons";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const fileInputColorImagesRef = useRef(null);
   const [colors, setColors] = useState([]);
+  const navigate = useNavigate();
 
   const [productData, setProductData] = useState({
     name: "",
@@ -16,13 +21,14 @@ const AddProduct = () => {
     pattern: "",
     description: "",
     price: "",
-    items: [], // Store items with color and sizes
+    items: [],
   });
 
   const [currentColor, setCurrentColor] = useState("");
   const [currentColorImages, setCurrentColorImages] = useState([]);
   const [currentSizes, setCurrentSizes] = useState([]);
   const [previewColors, setPreviewColors] = useState([]);
+  const [spin, setSpin] = useState(false);
 
   // Options for dropdowns
   const colorOptions = [
@@ -51,11 +57,13 @@ const AddProduct = () => {
 
   const handleSizeChange = (e, index) => {
     const { name, value } = e.target;
+    console.log(name, value);
     const updatedSizes = [...currentSizes];
     updatedSizes[index] = {
       ...updatedSizes[index],
       [name]: value,
     };
+    console.log(updatedSizes);
     setCurrentSizes(updatedSizes);
   };
 
@@ -64,6 +72,7 @@ const AddProduct = () => {
   };
 
   const handleColorImageUpload = (e) => {
+    setCurrentColorImages([]);
     const files = Array.from(e.target.files);
     setCurrentColorImages((prevImages) => [...prevImages, ...files]);
   };
@@ -89,7 +98,7 @@ const AddProduct = () => {
       setPreviewColors((prevColors) => [...prevColors, newItem]);
 
       // Reset the input fields
-      setCurrentColor("");
+      //setCurrentColor("");
       setCurrentColorImages([]);
       setCurrentSizes([]);
     }
@@ -97,7 +106,7 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setSpin(true);
     if (
       !productData.name ||
       !productData.price ||
@@ -106,7 +115,7 @@ const AddProduct = () => {
       alert("Please fill in all required fields.");
       return;
     }
-
+    console.log(productData);
     const formData = new FormData();
     formData.append("name", productData.name);
     formData.append("gender", productData.gender);
@@ -126,14 +135,14 @@ const AddProduct = () => {
       });
     });
 
-    console.log("Final product data being submitted:", productData);
-
     dispatch(createProductThunk(formData))
       .then((response) => {
+        setSpin(false);
         console.log("Product created successfully:", response);
-        // Reset the form or navigate to another page
+        toast.success(response?.payload?.message);
       })
       .catch((error) => {
+        // setSpin(false);
         console.error("Error creating product:", error);
       });
   };
@@ -142,20 +151,33 @@ const AddProduct = () => {
     fileInputColorImagesRef.current?.click();
   };
 
+  const back = () =>{
+    navigate("/dashboard")
+  }
+
   return (
     <Layout>
-      <div className="mt-[106px] p-6">
-        <h1 className="text-3xl font-extrabold mb-8 text-center text-gray-800">
-          Add New Product
-        </h1>
+      <div className="md:py-6">
+        <div className="flex justify-start gap-3 items-center mb-4 md:px-36">
+          <div onClick={back} className="w-12 h-12 bg-[#fff] rounded-full flex justify-center items-center cursor-pointer">
+            <BackIcon color="" width="24" height="24" />
+          </div>
+          <h1 className="text-xl md:text-3xl font-extrabold text-center text-[#fff]">
+            Add new product
+          </h1>
+        </div>
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
+          <div className="text-xs">
+            Note:- You can add multiple items of same product. Choose color,
+            product image and size again.{" "}
+          </div>
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Form Fields */}
             <div className="grid grid-cols-1 gap-6">
               {/* Name */}
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
+                  Product name
                 </label>
                 <input
                   type="text"
@@ -356,7 +378,7 @@ const AddProduct = () => {
                   onClick={addColor}
                   className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Add Color
+                  Preview
                 </button>
               </div>
             </div>
@@ -372,24 +394,26 @@ const AddProduct = () => {
                   <h3 className="text-lg font-medium mb-2">
                     Color: {colorItem.color}
                   </h3>
-                  <div className="flex flex-wrap gap-4 mb-4">
-                    {colorItem.colorImages.map((image, imgIndex) => (
-                      <img
-                        key={imgIndex}
-                        src={URL.createObjectURL(image)}
-                        alt={`Color ${colorItem.color} Image ${imgIndex + 1}`}
-                        className="w-24 h-24 object-cover"
-                      />
-                    ))}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Sizes & Stock</h4>
-                    {colorItem.sizes.map((size, sizeIndex) => (
-                      <div key={sizeIndex} className="mb-2">
-                        <span className="font-medium">{size.size}: </span>
-                        <span>{size.stock} in stock</span>
-                      </div>
-                    ))}
+                  <div className="flex gap-2">
+                    <div className="w-40 h-60">
+                      {colorItem.colorImages.map((image, imgIndex) => (
+                        <img
+                          key={imgIndex}
+                          src={URL.createObjectURL(image)}
+                          alt={`Color ${colorItem.color} Image ${imgIndex + 1}`}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">Sizes & Stock</h4>
+                      {colorItem.sizes.map((size, sizeIndex) => (
+                        <div key={sizeIndex} className="mb-2">
+                          <span className="font-medium">{size.size}: </span>
+                          <span>{size.stock} in stock</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -401,7 +425,7 @@ const AddProduct = () => {
                 type="submit"
                 className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                Submit Product
+                {spin ? "Submitting..." : "Submit Product"}
               </button>
             </div>
           </form>

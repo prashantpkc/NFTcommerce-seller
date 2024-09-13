@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Dashboard as DashboardIcon,
-  Add as AddIcon,
   MusicNote as MusicNoteIcon,
   ShoppingBag as ShoppingBagIcon,
   Person as PersonIcon,
@@ -11,6 +10,7 @@ import {
   ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 import { logout } from "../../redux/slices/authSlice"; // Adjust the import path
+import { InventoryIcon, AddIcon } from "../../assets/icon/Icons";
 
 const Sidebar = ({ isSidebarOpen }) => {
   const navigate = useNavigate();
@@ -40,20 +40,20 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   const sideBarLink = [
     { icon: <DashboardIcon fontSize="small" />, link: "Dashboard", href: "/dashboard" },
-    { icon: <AddIcon fontSize="small" />, link: "Add Product", href: "/add-product" },
-    { icon: <MusicNoteIcon fontSize="small" />, link: "Your Product", href: "/your-products" },
+    { icon: <AddIcon color="" width="18" height="18"/>, link: "Add Product", href: "/add-product" },
+    { icon: <InventoryIcon color="" width="18" height="18" />, link: "Inventory", href: "/your-products" },
     { icon: <ShoppingBagIcon fontSize="small" />, link: "Purchased Products", href: "/purchased-product" },
     { icon: <PersonIcon fontSize="small" />, link: "Profile", href: "/profile" },
     { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/signup" },
   ];
 
   const handleLinkClick = (href, link) => {
+    console.log(href, link)
     if (link === "Logout") {
-      console.log("Logging out..."); // Debugging output
-      dispatch(logout()); // Dispatch the logout action
-      navigate(href); // Navigate to other links
-      // Adjust the delay if necessary
+      dispatch(logout());
+      navigate(href);
     } else {
+      navigate(href);
     }
   };
 
@@ -100,13 +100,13 @@ const Sidebar = ({ isSidebarOpen }) => {
               onClick={() => handleLinkClick(item.href, item.link)}
               style={item.href === window.location.pathname ? activeLinkStyle : {}}
             >
-              <div className="flex items-baseline gap-2 sm:gap-3">
+              <div className="flex justify-center gap-2 sm:gap-3">
                 {item.icon}
                 <p className={`text-sm sm:text-base ${item.href === window.location.pathname ? "font-semibold" : ""}`} style={{ color: colors.text }}>
                   {item.link}
                 </p>
               </div>
-              <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} />
+              {/* <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} /> */}
             </div>
           ))}
         </div>
