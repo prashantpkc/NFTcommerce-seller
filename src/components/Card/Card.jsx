@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSellerCardSummary } from "../../redux/slices/cardSlice";
+import { useThemeColors } from '../utils/useThemeColor';
 
 export const Card = () => {
   const dispatch = useDispatch();
   const { summaryData, loading, error } = useSelector((state) => state.card);
-  console.log(summaryData, "data")
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
 
   useEffect(() => {
     dispatch(fetchSellerCardSummary());
   }, [dispatch]);
 
-  // Check if data is available and has necessary fields
   const totalSoldItems = summaryData?.data?.totalSoldItems || 0;
   const totalRevenue = summaryData?.data?.totalRevenue || 0;
   const todayRevenue = summaryData?.data?.todayRevenue || 0;
@@ -19,13 +19,12 @@ export const Card = () => {
 
   // Static card styling
   const cardStyle = {
-    backgroundColor: "#f5f5f5", // Example background color
-    border: "1px solid #ddd",    // Example border color
-    color: "#333",               // Example text color
+    backgroundColor: isDarkEnabled?"#0d012d" :"#fff", 
+    color: isDarkEnabled?"#fff":"#333",         
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="w-full flex flex-wrap justify-between gap-3">

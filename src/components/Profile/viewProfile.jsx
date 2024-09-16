@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSeller, uploadProfilePic, uploadIdCard } from "../../redux/slices/authSlice";
 import { toast } from "react-hot-toast";
+import { useThemeColors } from "../utils/useThemeColor";
 import { CleanHands } from "@mui/icons-material";
 
 const ViewProfile = () => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const dispatch = useDispatch();
 
   const {
@@ -96,11 +98,11 @@ const ViewProfile = () => {
   return (
     <div className="flex flex-col lg:flex-row text-white gap-6 lg:gap-8">
       {/* First Card */}
-      <div className="border border-blue-900 rounded-lg bg-gradient-to-t from-blue-600 to-blue-900 p-6 lg:w-[580px] w-full">
+      <div className={`border  bg-[${useThemeColors(isDarkEnabled).cardBg}]  rounded-2xl p-6 lg:w-[580px] w-full`}>
         <div className="flex flex-col lg:flex-row items-center">
           {/* Left Column - Profile Picture */}
           <div className="w-full lg:w-1/2 flex flex-col items-center mb-6 lg:mb-0">
-            <h2 className="text-lg font-semibold mb-4">Edit Profile Picture</h2>
+            <h2 className={`text-lg font-semibold mb-4 text-[${useThemeColors(isDarkEnabled).edittext}]`}>Edit Profile Picture</h2>
             <div className="w-32 h-32 mb-4 relative">
               <img
                 src={profilePicPreview || "default-profile-pic-url"} // Add default image URL if no preview
@@ -118,7 +120,7 @@ const ViewProfile = () => {
             </div>
             <button
               onClick={handleUpload}
-              className="px-12 py-1 bg-gradient-to-r from-sky-400 to-pink-500 text-white rounded shadow-lg"
+              className="px-12 py-1 bg-blue-600 text-white rounded shadow-lg"
             >
               Upload
             </button>
@@ -129,7 +131,7 @@ const ViewProfile = () => {
 
           {/* Right Column - ID Card */}
           <div className="w-full lg:w-1/2 flex flex-col items-center">
-            <h2 className="text-lg font-semibold mb-4">Edit ID Card</h2>
+            <h2 className={`text-lg font-semibold mb-4 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Edit ID Card</h2>
             <div className="w-48 h-32 mb-4 relative">
               <img
                 src={idCardPreview || "default-id-card-url"} // Add default image URL if no preview
@@ -147,7 +149,7 @@ const ViewProfile = () => {
             </div>
             <button
               onClick={handleUpload}
-              className="px-12 py-1 bg-black text-white rounded shadow-lg"
+              className="px-12 py-1 bg-blue-600 text-white rounded shadow-lg"
             >
               Upload
             </button>
@@ -156,26 +158,26 @@ const ViewProfile = () => {
       </div>
 
       {/* Second Card */}
-      <div className="border border-blue-900 rounded-lg bg-gradient-to-t from-blue-600 to-blue-900 p-6 lg:w-[580px] w-full">
-        <h1 className="text-lg font-semibold">Seller Full Details</h1>
+      <div className={`border  bg-[${useThemeColors(isDarkEnabled).cardBg}]   p-6 lg:w-[580px] rounded-2xl w-full`}>
+        <h1 className={`text-lg font-semibold text-[${useThemeColors(isDarkEnabled).edittext}] `}>Seller Full Details</h1>
         <hr className="mt-3 mb-6" />
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex justify-between items-baseline">
           <div>
-            <p className="mb-2">Full Name</p>
-            <p className="mb-2">Email</p>
-            <p className="mb-2">Phone</p>
-            <p className="mb-2">Address</p>
-            <p className="mb-2">Country</p>
-            <p className="mb-2">Pin Code</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Full Name</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Email</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Phone</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Address</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Country</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Pin Code</p>
           </div>
           <div className="lg:ml-[200px] mt-4 lg:mt-0">
-            <p className="mb-2">{user?.name || "N/A"}</p>
-            <p className="mb-2">{user?.email || "N/A"}</p>
-            <p className="mb-2">{user?.phone || "N/A"}</p>
-            <p className="mb-2">{user?.address || "N/A"}</p>
-            <p className="mb-2">{user?.country || "N/A"}</p>
-            <p className="mb-2">{user?.postalCode || "N/A"}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.name}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.email}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.phone}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.address}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.country}</p>
+            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.postalCode}</p>
           </div>
         </div>
       </div>

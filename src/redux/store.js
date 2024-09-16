@@ -1,22 +1,48 @@
 import { configureStore } from "@reduxjs/toolkit";
+import {persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import authReducer from "./slices/authSlice";
+import settingSlice from "./slices/settingSlice";
 import darkModeReducer from "./slices/darkModeSlice";
 import navfixedReducer from "./slices/navfixedSlice";
 import sidebarNavColorReducer from "./slices/sidebarNavColorSlice";
 import sidebarDarkModeReducer from "./slices/sidebarDarkModeSlice";
-import productReducer from "./slices/productSlice"; // Importing product slice reducer
+import productReducer from "./slices/productSlice";
 import cardReducer from "./slices/cardSlice";
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+const persistAuth = persistReducer(
+  { ...persistConfig, key: "auth" },
+  authReducer
+);
+const settingModal = persistReducer(
+  { ...persistConfig, key: "modal" },
+  settingSlice
+);
+
+const product = persistReducer(
+  { ...persistConfig, key: "product" },
+  productReducer
+);
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,                   // Manages authentication state
-    darkmode: darkModeReducer,           // Manages dark mode state
-    navfix: navfixedReducer,             // Manages navbar fixed state
-    sidebarbg: sidebarNavColorReducer,   // Manages sidebar background color
-    product: productReducer,             // Manages product-related state
-    sidebarDarkMode: sidebarDarkModeReducer, // Manages sidebar dark mode state
+    auth: persistAuth, 
+    modal: settingModal,          
+    darkmode: darkModeReducer,  
+    navfix: navfixedReducer,        
+    sidebarbg: sidebarNavColorReducer, 
+    product: product,       
+    sidebarDarkMode: sidebarDarkModeReducer,
     card: cardReducer,
   },
 });
 
-export default store;
+
+const persistor = persistStore(store);
+
+export { store, persistor };

@@ -1,26 +1,41 @@
 import React from 'react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-import Footer from '../Footer/Footer';
+import { useSelector } from 'react-redux';
+import { useThemeColors } from '../utils/useThemeColor';
+
+
 
 const Layout = ({ children }) => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   return (
-    <div className="flex flex-col h-screen">
-      {/* Header */}
-      <Header />
-      
-      <div className="flex flex-1">
-        {/* Sidebar */}
+    <div className="relative flex w-full min-h-screen ">
+      <div
+        className="fixed top-0 left-0 w-full"
+        style={{
+          height: "43vh",
+          //  background: "#070a68",
+          background:useThemeColors(isDarkEnabled).layoutbg,
+          zIndex: 0,
+        }}
+      ></div>
+      <div
+        className="fixed bottom-0 left-0 w-full"
+        style={{
+          height: "59vh",
+          background:useThemeColors(isDarkEnabled).layoutbottombg,
+          zIndex: 0,
+        }}
+      ></div>
+      <div className="w-1/5 z-10 fixed hidden lg:block">
         <Sidebar />
-        
-        {/* Main Content Area */}
-        <main className="flex-1 ml-0 md:ml-[20%] p-4">
-          {children}
-        </main>
       </div>
-      
-      {/* Footer */}
-      {/* <Footer /> */}
+      <div className="w-full px-4 lg:w-4/5 z-10 ml-auto">
+        <div className={true?"mb-2":""}>
+          <Header />
+        </div>
+        {children}
+      </div>
     </div>
   );
 };

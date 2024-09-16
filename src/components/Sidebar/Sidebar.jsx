@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Dashboard as DashboardIcon,
-  Add as AddIcon,
   MusicNote as MusicNoteIcon,
   ShoppingBag as ShoppingBagIcon,
   Person as PersonIcon,
@@ -11,6 +10,8 @@ import {
   ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 import { logout } from "../../redux/slices/authSlice"; // Adjust the import path
+import { InventoryIcon, AddIcon } from "../../assets/icon/Icons";
+import { useThemeColors } from "../utils/useThemeColor";
 
 const Sidebar = ({ isSidebarOpen }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   console.log(navbg, "navbg"); // Debugging output
 
   const colors = {
-    cardBg: isDarkEnabled ? "#1a1a1a" : "#ffffff",
+    cardBg: isDarkEnabled ? "#040836" : "#ffffff",
     borderColor: isDarkEnabled ? "#333333" : "#dddddd",
     text: isDarkEnabled ? "#ffffff" : "#000000",
   };
@@ -40,13 +41,14 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   const sideBarLink = [
     { icon: <DashboardIcon fontSize="small" />, link: "Dashboard", href: "/dashboard" },
-    { icon: <AddIcon fontSize="small" />, link: "Add Product", href: "/add-product" },
-    { icon: <MusicNoteIcon fontSize="small" />, link: "Your Product", href: "/your-products" },
+    { icon: <AddIcon color={`${useThemeColors(isDarkEnabled).text}`}width="18" height="18"/>, link: "Add Product", href: "/add-product" },
+    { icon: <InventoryIcon color={`${useThemeColors(isDarkEnabled).text}`}width="18" height="18" />, link: "Inventory", href: "/your-products" },
     { icon: <ShoppingBagIcon fontSize="small" />, link: "Purchased Products", href: "/purchased-product" },
     { icon: <PersonIcon fontSize="small" />, link: "Profile", href: "/profile" },
     { icon: <LogoutIcon fontSize="small" />, link: "Logout", href: "/signup" },
   ];
   const handleLinkClick = (href, link) => {
+    console.log(href, link)
     if (link === "Logout") {
       console.log("Logging out..."); // Debugging output
   
@@ -75,7 +77,7 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`fixed top-2 left-0 w-[75%] sm:w-[20%] h-screen px-5 py-3 z-20 transition-transform duration-300 ease-in-out transform ${
+      className={`fixed top-0 md:top-2 left-0 w-[75%] sm:w-[20%] h-screen md:px-5 md:py-3 z-20 transition-transform duration-300 ease-in-out transform ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } sm:translate-x-0`}
     >
@@ -105,13 +107,13 @@ const Sidebar = ({ isSidebarOpen }) => {
               onClick={() => handleLinkClick(item.href, item.link)}
               style={item.href === window.location.pathname ? activeLinkStyle : {}}
             >
-              <div className="flex items-baseline gap-2 sm:gap-3">
+              <div className="flex justify-center gap-2 sm:gap-3">
                 {item.icon}
                 <p className={`text-sm sm:text-base ${item.href === window.location.pathname ? "font-semibold" : ""}`} style={{ color: colors.text }}>
                   {item.link}
                 </p>
               </div>
-              <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} />
+              {/* <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} /> */}
             </div>
           ))}
         </div>

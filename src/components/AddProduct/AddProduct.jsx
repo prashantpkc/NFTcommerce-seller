@@ -1,12 +1,19 @@
-import React, { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../Layout/Layout";
 import { createProductThunk } from "../../redux/slices/productSlice";
+import { BackIcon } from "../../assets/icon/Icons";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useThemeColors } from '../utils/useThemeColor';
+
 
 const AddProduct = () => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const dispatch = useDispatch();
   const fileInputColorImagesRef = useRef(null);
   const [colors, setColors] = useState([]);
+  const navigate = useNavigate();
 
   const [productData, setProductData] = useState({
     name: "",
@@ -16,13 +23,14 @@ const AddProduct = () => {
     pattern: "",
     description: "",
     price: "",
-    items: [], // Store items with color and sizes
+    items: [],
   });
 
   const [currentColor, setCurrentColor] = useState("");
   const [currentColorImages, setCurrentColorImages] = useState([]);
   const [currentSizes, setCurrentSizes] = useState([]);
   const [previewColors, setPreviewColors] = useState([]);
+  const [spin, setSpin] = useState(false);
 
   // Options for dropdowns
   const colorOptions = [
@@ -51,11 +59,13 @@ const AddProduct = () => {
 
   const handleSizeChange = (e, index) => {
     const { name, value } = e.target;
+    console.log(name, value);
     const updatedSizes = [...currentSizes];
     updatedSizes[index] = {
       ...updatedSizes[index],
       [name]: value,
     };
+    console.log(updatedSizes);
     setCurrentSizes(updatedSizes);
   };
 
@@ -64,6 +74,7 @@ const AddProduct = () => {
   };
 
   const handleColorImageUpload = (e) => {
+    setCurrentColorImages([]);
     const files = Array.from(e.target.files);
     setCurrentColorImages((prevImages) => [...prevImages, ...files]);
   };
@@ -89,7 +100,7 @@ const AddProduct = () => {
       setPreviewColors((prevColors) => [...prevColors, newItem]);
 
       // Reset the input fields
-      setCurrentColor("");
+      //setCurrentColor("");
       setCurrentColorImages([]);
       setCurrentSizes([]);
     }
@@ -97,7 +108,7 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setSpin(true);
     if (
       !productData.name ||
       !productData.price ||
@@ -106,7 +117,7 @@ const AddProduct = () => {
       alert("Please fill in all required fields.");
       return;
     }
-
+    console.log(productData);
     const formData = new FormData();
     formData.append("name", productData.name);
     formData.append("gender", productData.gender);
@@ -126,14 +137,14 @@ const AddProduct = () => {
       });
     });
 
-    console.log("Final product data being submitted:", productData);
-
     dispatch(createProductThunk(formData))
       .then((response) => {
+        setSpin(false);
         console.log("Product created successfully:", response);
-        // Reset the form or navigate to another page
+        toast.success(response?.payload?.message);
       })
       .catch((error) => {
+        // setSpin(false);
         console.error("Error creating product:", error);
       });
   };
@@ -142,41 +153,54 @@ const AddProduct = () => {
     fileInputColorImagesRef.current?.click();
   };
 
+  const back = () =>{
+    navigate("/dashboard")
+  }
+
   return (
     <Layout>
-      <div className="mt-[106px] p-6">
-        <h1 className="text-3xl font-extrabold mb-8 text-center text-gray-800">
-          Add New Product
-        </h1>
-        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
+      <div className="md:py-6">
+        <div className="flex justify-start gap-3 items-center mb-4 md:px-36">
+          <div onClick={back} className={`w-12 h-12 bg-[${useThemeColors(isDarkEnabled).cardBg}] rounded-full flex justify-center items-center cursor-pointer`}>
+            <BackIcon color={`${useThemeColors(isDarkEnabled).text}`} width="24" height="24" />
+          </div>
+          <h1 className="text-xl md:text-3xl font-extrabold text-center text-[#fff]">
+            Add new product
+          </h1>
+        </div>
+        <div className={`max-w-4xl mx-auto bg-[${useThemeColors(isDarkEnabled).cardBg}] shadow-lg rounded-lg p-8`}>
+          <div className={`text-xs text-[${useThemeColors(isDarkEnabled).text}] `}>
+            Note:- You can add multiple items of same product. Choose color,
+            product image and size again.{" "}
+          </div>
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Form Fields */}
             <div className="grid grid-cols-1 gap-6">
               {/* Name */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
+                <label className={`text-[${useThemeColors(isDarkEnabled).text}] block text-sm font-medium mb-2`}>
+                  Product name
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={productData.name}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}]  border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 />
               </div>
 
               {/* Gender */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Gender
                 </label>
                 <select
                   name="gender"
                   value={productData.gender}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full border bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 >
                   <option value="">Select Gender</option>
@@ -190,14 +214,14 @@ const AddProduct = () => {
 
               {/* Category */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Category
                 </label>
                 <select
                   name="category"
                   value={productData.category}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 >
                   <option value="">Select Category</option>
@@ -211,14 +235,14 @@ const AddProduct = () => {
 
               {/* Fabric */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`lock text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Fabric
                 </label>
                 <select
                   name="fabric"
                   value={productData.fabric}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 >
                   <option value="">Select Fabric</option>
@@ -232,14 +256,14 @@ const AddProduct = () => {
 
               {/* Pattern */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Pattern
                 </label>
                 <select
                   name="pattern"
                   value={productData.pattern}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 >
                   <option value="">Select Pattern</option>
@@ -253,7 +277,7 @@ const AddProduct = () => {
 
               {/* Price */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Price
                 </label>
                 <input
@@ -261,20 +285,20 @@ const AddProduct = () => {
                   name="price"
                   value={productData.price}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}]  border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   required
                 />
               </div>
 
               {/* Color */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Color
                 </label>
                 <select
                   value={currentColor}
                   onChange={(e) => setCurrentColor(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">Select Color</option>
                   {colorOptions.map((color) => (
@@ -287,7 +311,7 @@ const AddProduct = () => {
 
               {/* Color Images */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Color Images
                 </label>
                 <input
@@ -301,7 +325,7 @@ const AddProduct = () => {
                 <button
                   type="button"
                   onClick={handleImageClick}
-                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full border border-gray-300 rounded-lg p-3 bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   Upload Color Images
                 </button>
@@ -309,7 +333,7 @@ const AddProduct = () => {
 
               {/* Sizes */}
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium text-[${useThemeColors(isDarkEnabled).text}] mb-2`}>
                   Sizes
                 </label>
 
@@ -319,7 +343,7 @@ const AddProduct = () => {
                       name="size"
                       value={size.size}
                       onChange={(e) => handleSizeChange(e, index)}
-                      className="border border-gray-300 rounded-lg p-3 w-1/2"
+                      className={`bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 w-1/2`}
                       required
                     >
                       <option value="">Select Size</option>
@@ -335,7 +359,7 @@ const AddProduct = () => {
                       value={size.stock}
                       onChange={(e) => handleSizeChange(e, index)}
                       placeholder="Stock"
-                      className="border border-gray-300 rounded-lg p-3 w-1/2"
+                      className={`bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 w-1/2`}
                       required
                     />
                   </div>
@@ -343,7 +367,7 @@ const AddProduct = () => {
                 <button
                   type="button"
                   onClick={addSize}
-                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full border border-gray-300 rounded-lg p-3 bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   Add Size
                 </button>
@@ -354,16 +378,16 @@ const AddProduct = () => {
                 <button
                   type="button"
                   onClick={addColor}
-                  className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
-                  Add Color
+                  Preview
                 </button>
               </div>
             </div>
 
             {/* Color Previews */}
             <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Color Previews</h2>
+              <h2 className={`text-xl font-semibold mb-4 text-[${useThemeColors(isDarkEnabled).text}]`}>Color Previews</h2>
               {previewColors.map((colorItem, index) => (
                 <div
                   key={index}
@@ -372,24 +396,26 @@ const AddProduct = () => {
                   <h3 className="text-lg font-medium mb-2">
                     Color: {colorItem.color}
                   </h3>
-                  <div className="flex flex-wrap gap-4 mb-4">
-                    {colorItem.colorImages.map((image, imgIndex) => (
-                      <img
-                        key={imgIndex}
-                        src={URL.createObjectURL(image)}
-                        alt={`Color ${colorItem.color} Image ${imgIndex + 1}`}
-                        className="w-24 h-24 object-cover"
-                      />
-                    ))}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Sizes & Stock</h4>
-                    {colorItem.sizes.map((size, sizeIndex) => (
-                      <div key={sizeIndex} className="mb-2">
-                        <span className="font-medium">{size.size}: </span>
-                        <span>{size.stock} in stock</span>
-                      </div>
-                    ))}
+                  <div className="flex gap-2">
+                    <div className="w-40 h-60">
+                      {colorItem.colorImages.map((image, imgIndex) => (
+                        <img
+                          key={imgIndex}
+                          src={URL.createObjectURL(image)}
+                          alt={`Color ${colorItem.color} Image ${imgIndex + 1}`}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">Sizes & Stock</h4>
+                      {colorItem.sizes.map((size, sizeIndex) => (
+                        <div key={sizeIndex} className="mb-2">
+                          <span className="font-medium">{size.size}: </span>
+                          <span>{size.stock} in stock</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -399,9 +425,9 @@ const AddProduct = () => {
             <div className="relative">
               <button
                 type="submit"
-                className="w-full border border-gray-300 rounded-lg p-3 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full border border-gray-300 rounded-lg p-3 bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
-                Submit Product
+                {spin ? "Submitting..." : "Submit Product"}
               </button>
             </div>
           </form>

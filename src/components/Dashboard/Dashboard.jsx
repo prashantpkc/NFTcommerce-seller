@@ -2,19 +2,20 @@ import React from "react";
 import { Card } from "../Card/Card";
 import Layout from "../Layout/Layout";
 import SalesGraph from "./SalesOverview/SalesGraph";
+import Transaction from "../Transaction/Transaction";
 
 const Dashboard = () => {
   return (
     <Layout>
-      {/* Main Content Area */}
-      <div className="flex flex-col flex-1 p-4 mt-24">
+      <div className="flex flex-col flex-1 my-8">
         <Card />
       </div>
-
       <div>
         <SalesGraph/>
       </div>
-
+      <div className="my-8">
+        <Transaction/>
+      </div>
     </Layout>
   );
 };

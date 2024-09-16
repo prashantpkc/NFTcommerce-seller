@@ -67,9 +67,13 @@ const productSlice = createSlice({
         state.success = false;
       })
       .addCase(createProductThunk.fulfilled, (state, action) => {
+        console.log(action.payload)
         state.loading = false;
         state.success = true;
-        state.products.push(action.payload); // Assuming action.payload is a single product
+        if (Array.isArray(state.products)) {
+          state.products.push(action.payload?.product); // Assuming action.payload contains a product object
+        }
+        // state.products.push(action.payload?.product); // Assuming action.payload is a single product
       })
       .addCase(createProductThunk.rejected, (state, action) => {
         state.loading = false;
