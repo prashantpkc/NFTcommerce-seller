@@ -1,17 +1,21 @@
 import React from 'react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { useSelector } from 'react-redux';
+import { useThemeColors } from '../utils/useThemeColor';
+
 
 
 const Layout = ({ children }) => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   return (
     <div className="relative flex w-full min-h-screen ">
       <div
         className="fixed top-0 left-0 w-full"
         style={{
           height: "43vh",
-           background: "#070a68",
-          // background:useSellerThemeColors(isDarkEnabled).layoutbg,
+          //  background: "#070a68",
+          background:useThemeColors(isDarkEnabled).layoutbg,
           zIndex: 0,
         }}
       ></div>
@@ -19,7 +23,7 @@ const Layout = ({ children }) => {
         className="fixed bottom-0 left-0 w-full"
         style={{
           height: "59vh",
-          background: "#f4f6f8",
+          background:useThemeColors(isDarkEnabled).layoutbottombg,
           zIndex: 0,
         }}
       ></div>

@@ -19,11 +19,14 @@ const persistAuth = persistReducer(
   { ...persistConfig, key: "auth" },
   authReducer
 );
-
-
 const settingModal = persistReducer(
   { ...persistConfig, key: "modal" },
   settingSlice
+);
+
+const product = persistReducer(
+  { ...persistConfig, key: "product" },
+  productReducer
 );
 
 const store = configureStore({
@@ -33,7 +36,7 @@ const store = configureStore({
     darkmode: darkModeReducer,  
     navfix: navfixedReducer,        
     sidebarbg: sidebarNavColorReducer, 
-    product: productReducer,       
+    product: product,       
     sidebarDarkMode: sidebarDarkModeReducer,
     card: cardReducer,
   },

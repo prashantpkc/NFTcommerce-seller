@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import SalesChart from './SalesChart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMonthlySalesData } from '../../../redux/slices/cardSlice';
+import { useThemeColors } from '../../utils/useThemeColor';
+
 
 const SalesGraph = () => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
+
   const [years, setYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(2024); // Default year
   const dispatch = useDispatch();
@@ -29,19 +33,20 @@ const SalesGraph = () => {
   const handleChangeMonth = (event) => {
     setSelectedMonth(Number(event.target.value));
   };
+  console.log(useThemeColors(isDarkEnabled).cardBg);
 
   return (
-    <div className="w-full h-96 rounded-2xl p-4 bg-white border border-gray-300 text-black">
+    <div className={`w-full h-96 rounded-2xl p-4 bg-[${useThemeColors(isDarkEnabled).cardBg}]`}>
       <div className="flex justify-between mb-4">
         <div>
-          <p className="text-lg font-semibold">Sales Overview</p>
+          <p className={`text-lg font-semibold text-[${useThemeColors(isDarkEnabled).text}]`}>Sales Overview</p>
           <p className="text-gray-500">
             <span className="text-green-500">5%</span> more in {selectedYear}
           </p>
         </div>
         <div>
           <select
-            className="w-40 h-10 border border-gray-300 rounded-xl bg-white text-black mb-2"
+            className={`w-40 h-10 border border-gray-300 rounded-xl bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] mb-2`}
             onChange={handleChangeYear}
             value={selectedYear}
           >

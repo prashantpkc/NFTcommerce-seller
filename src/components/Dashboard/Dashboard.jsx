@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "../Card/Card";
 import Layout from "../Layout/Layout";
 import SalesGraph from "./SalesOverview/SalesGraph";
+import Transaction from "../Transaction/Transaction";
 
 const Dashboard = () => {
   return (
@@ -11,6 +12,9 @@ const Dashboard = () => {
       </div>
       <div>
         <SalesGraph/>
+      </div>
+      <div className="my-8">
+        <Transaction/>
       </div>
     </Layout>
   );

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSellerCardSummary } from "../../redux/slices/cardSlice";
+import { useThemeColors } from '../utils/useThemeColor';
 
 export const Card = () => {
   const dispatch = useDispatch();
   const { summaryData, loading, error } = useSelector((state) => state.card);
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
 
   useEffect(() => {
     dispatch(fetchSellerCardSummary());
@@ -17,9 +19,8 @@ export const Card = () => {
 
   // Static card styling
   const cardStyle = {
-    backgroundColor: "#fff", // Example background color
-    border: "1px solid #ddd",    // Example border color
-    color: "#333",               // Example text color
+    backgroundColor: isDarkEnabled?"#0d012d" :"#fff", 
+    color: isDarkEnabled?"#fff":"#333",         
   };
 
   // if (loading) return <p>Loading...</p>;

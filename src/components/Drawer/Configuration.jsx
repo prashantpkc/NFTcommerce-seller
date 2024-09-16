@@ -8,7 +8,6 @@ import {
   setSidebarLight,
 } from "../../redux/slices/sidebarDarkModeSlice";
 
-import { Close } from "@mui/icons-material";
 import { Stack, Switch, styled } from "@mui/material";
 import { openSettingModal } from "../../redux/slices/settingSlice";
 import { CrossIcon } from "../../assets/icon/Icons";
@@ -183,15 +182,15 @@ const Configuration = () => {
           </div>
           <div className="flex flex-col gap-5 mt-8">
             <div className="flex justify-center items-center cursor-pointer w-full h-10 bg-black text-white rounded-md">
-              <p className="text-white font-semibold">Free Download</p>
+              <p className="text-white font-semibold">Dashboard</p>
             </div>
             <div className="flex justify-center items-center cursor-pointer w-full h-10 border border-[black] text-white rounded-md">
-              <p className="text-[#384b6a] font-semibold">View Documentation</p>
+              <p className="text-[#384b6a] font-semibold">Profile</p>
             </div>
           </div>
           <div className="mt-8 flex flex-col justify-center items-center">
             <p className="text-[#384b68] font-semibold mb-2">
-              Thank you for sharing!
+              Thank you for visit
             </p>
           </div>
         </div>

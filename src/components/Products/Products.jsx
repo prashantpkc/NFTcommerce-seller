@@ -4,8 +4,10 @@ import { getSellerProductsThunk } from "../../redux/slices/productSlice";
 import Layout from "../Layout/Layout";
 import { BackIcon, SearchIcon } from "../../assets/icon/Icons";
 import { useNavigate } from "react-router-dom";
+import { useThemeColors } from "../utils/useThemeColor";
 
 const Products = () => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.product);
@@ -47,20 +49,20 @@ const Products = () => {
         <div className="flex justify-start gap-3 items-center">
           <div
             onClick={back}
-            className="w-8 md:w-12 h-8 md:h-12 bg-[#fff] rounded-full flex justify-center items-center cursor-pointer"
+            className={`w-8 md:w-12 h-8 md:h-12 bg-[${useThemeColors(isDarkEnabled).cardBg}]    rounded-full flex justify-center items-center cursor-pointer`}
           >
-            <BackIcon color="" width="24" height="24" />
+            <BackIcon color={`${useThemeColors(isDarkEnabled).text}`} width="24" height="24" />
           </div>
           <h1 className="text-xl md:text-3xl font-extrabold text-center text-[#fff]">
             Inventory
           </h1>
         </div>
         <div className="relative">
-          <input type="text" placeholder="Search" className="pl-10 outline-none h-10 md:h-12 rounded-full text-[#0a0a0a] w-40  md:w-48" />
+          <input type="text" placeholder="Search" className={`bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] pl-10 outline-none h-10 md:h-12 rounded-full w-40  md:w-48`} />
           <div className="absolute top-2 md:top-3 left-2"><SearchIcon color="#a5a4a4" width="24" height="24"/></div>
         </div> 
       </div>
-      <div className="w-full h-auto md:p-4 bg-[#fff] mb-2 rounded-2xl">
+      <div className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}]  h-auto md:p-4 mb-2 rounded-2xl`}>
         <div className="flex flex-wrap gap-6 p-1 md:p-2">
           {products?.data && products.data.length > 0 ? (
             products.data.map((product) => {
@@ -69,7 +71,7 @@ const Products = () => {
               return (
                 <div
                   key={product._id}
-                  className="border rounded-lg overflow-hidden shadow-lg bg-white flex flex-col w-full sm:w-[calc(33.33%-16px)]"
+                  className={`border rounded-lg overflow-hidden shadow-lg bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] flex flex-col w-full sm:w-[calc(33.33%-16px)]`}
                 >
                   <div className="w-full h-72 relative">
                     <img

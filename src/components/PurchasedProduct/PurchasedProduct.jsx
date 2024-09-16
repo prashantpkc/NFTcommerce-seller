@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSoldCoursesBySellerThunk } from "../../redux/slices/productSlice";
 import { BackIcon, SearchIcon } from "../../assets/icon/Icons";
 import { useNavigate } from "react-router-dom";
+import { useThemeColors } from "../utils/useThemeColor";
 
 const PurchasedProduct = () => {
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { soldCourses, loading, error } = useSelector((state) => state.product);
@@ -24,9 +26,9 @@ const PurchasedProduct = () => {
         <div className="flex justify-start gap-3 items-center">
           <div
             onClick={back}
-            className="w-8 md:w-12 h-8 md:h-12 bg-[#fff] rounded-full flex justify-center items-center cursor-pointer"
+            className={`w-8 md:w-12 h-8 md:h-12 bg-[${useThemeColors(isDarkEnabled).cardBg}]  rounded-full flex justify-center items-center cursor-pointer`}
           >
-            <BackIcon color="" width="24" height="24" />
+            <BackIcon color={`${useThemeColors(isDarkEnabled).text}`} width="24" height="24" />
           </div>
           <h1 className="text-lg md:text-3xl font-extrabold text-center text-[#fff]">
             Purchased product
@@ -36,7 +38,7 @@ const PurchasedProduct = () => {
           <input
             type="text"
             placeholder="Search"
-            className="pl-10 outline-none h-10 md:h-12 rounded-full text-[#0a0a0a] w-32 md:w-48"
+            className={`pl-10 outline-none h-10 md:h-12 rounded-full bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] w-32 md:w-48`}
           />
           <div className="absolute top-2 md:top-3 left-2">
             <SearchIcon color="#a5a4a4" width="24" height="24" />
@@ -54,13 +56,13 @@ const PurchasedProduct = () => {
           soldCourses?.data?.length === 0) && (
           <p className="text-center">No purchased products found.</p>
         )}
-      <div className="w-full h-auto md:p-4 bg-[#fff] mb-2 rounded-2xl">
+      <div className={`w-full h-auto md:p-4  bg-[${useThemeColors(isDarkEnabled).cardBg}] mb-2 rounded-2xl`}>
         <div className="flex flex-wrap gap-6 p-1 md:p-2">
           {Array.isArray(soldCourses?.data) &&
             soldCourses?.data.map((course) => (
               <div
                 key={course._id}
-                className="rounded-lg shadow-lg bg-white hover:bg-gray-100 transition ease-in-out duration-300 w-full sm:w-[calc(33.33%-16px)]"
+                className={`rounded-lg shadow-lg bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] hover:bg-gray-100 transition ease-in-out duration-300 w-full sm:w-[calc(33.33%-16px)]`}
               >
                 <div className="flex flex-col">
                   <img
@@ -94,7 +96,7 @@ const PurchasedProduct = () => {
                             key={item._id}
                             className="flex flex-col mb-2"
                           >
-                            <p className="text-sm font-medium text-gray-800">
+                            <p className="text-sm font-medium text-gray-600">
                               Color: {item.color}
                             </p>
                             <p className="text-sm text-gray-600">

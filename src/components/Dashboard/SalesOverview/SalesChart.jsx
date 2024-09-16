@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import moment from 'moment';
+import { useThemeColors } from '../../utils/useThemeColor';
+import { useSelector } from 'react-redux';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -46,11 +48,11 @@ const CustomDot = ({ cx, cy, payload }) => {
 
 const SalesChart = ({ data, year }) => {
   const [filteredData, setFilteredData] = useState([]);
-
-  const lineColorItems = "#5E72E4"; // Color for items line
-  const lineColorRevenue = "#82ca9d"; // Color for revenue line
+  const isDarkEnabled = useSelector((state) => state.darkmode.dark);
+  const lineColorItems = "#5E72E4";
+  const lineColorRevenue = "#82ca9d";
   const gridColor = "#e0e0e0";
-  const axisColor = "#333";
+  const axisColor = isDarkEnabled?"#fff":"#333";
   const legendTextColor = "#000";
 
   useEffect(() => {
