@@ -7,10 +7,12 @@ import { loginUser, googleAuthUser } from "../../redux/slices/authSlice"; // Adj
 import { auth, provider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { toast } from "react-hot-toast"; // Assuming you are using react-toastify for notifications
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [spin, setSpin] = useState(false);
   const { status, error } = useSelector((state) => state.auth);
 
   console.log(status, "status")
@@ -18,18 +20,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     console.log(error);
-  //     toast.error(error.error);
-  //   }
-
-  //   if (status === 'succeeded') {
-  //       toast.success("Logged in successful!");
-  //       navigate("/dashboard"); 
-  //     }
-  // }, []);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -39,16 +29,19 @@ const Login = () => {
     navigate("/Signup");
   };
   const handleLogin = async (e) => {
-    console.log("hello")
+    setSpin(true)
     e.preventDefault();
     try {
      const result = await dispatch(loginUser({ email, password }));
-     console.log(result.payload)
      if(result.payload?.success){
+      setSpin(false)
       navigate("/dashboard"); 
+     }else{
+      setSpin(false)
+      toast.error(result.payload?.error)
      }
     } catch (error) {
-      console.log(error)
+      setSpin(false)
     }
     
   };
@@ -77,12 +70,9 @@ const Login = () => {
 
   return (
     <div className="bg-gradient-to-t from-purple-500 to-blue-500 w-full min-h-screen flex flex-col  lg:flex-row items-center justify-center">
-      {/* Image container: hidden on screens smaller than large */}
       <div className="w-full lg:w-1/2  justify-center mb-10 lg:mb-0 hidden lg:flex ">
         <img src={image2} alt="Login" className="max-w-full h-auto lg:ml-28" />
       </div>
-
-      {/* Form container */}
       <div className="w-full lg:w-1/2 flex flex-col  items-center text-white px-8 ">
         <form onSubmit={handleLogin} className="w-full max-w-md">
           <h1 className="font-bold text-3xl  mb-6 text-center lg:text-left">
@@ -95,7 +85,7 @@ const Login = () => {
           <div className="flex justify-center lg:justify-start mt-4 mb-6">
             <button
               className="flex items-center justify-center border border-white rounded-2xl w-full py-2"
-              onClick={signWithGoogle} // Attach Google sign-in handler
+              onClick={signWithGoogle}
             >
               <FaGoogle className="text-yellow-200 mr-2" />
               Sign In with Google
@@ -140,14 +130,11 @@ const Login = () => {
             </div>
           </div><br/>
 
-          {/* <h1 className="text-yellow-300 text-right mb-4 cursor-pointer">Forgot Password?</h1> */}
-
           <button
             type="submit"
-            className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-6"
-            // onClick={handleLogin}
+            className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-6 flex justify-center items-center"
           >
-            Sign In
+            {spin? <div className="flex gap-2"><CircularProgress size="20px" /> Submitting...</div>:"Sign In"}
           </button>
 
           <p className="text-center">Don't have an account?</p>

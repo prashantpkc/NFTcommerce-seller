@@ -19,6 +19,8 @@ const Sidebar = ({ isSidebarOpen }) => {
   const isDarkEnabled = useSelector((state) => state.darkmode.dark);
   const navbg = useSelector((state) => state.sidebarbg?.color);
   const isSidebarDarkEnabled = useSelector((state) => state.sidebarDarkMode.isSidebarDark);
+  const { summaryData, loading, error } = useSelector((state) => state.card);
+  const totalRevenue = summaryData?.data?.totalRevenue || 0;
 
   console.log(navbg, "navbg"); // Debugging output
 
@@ -116,6 +118,14 @@ const Sidebar = ({ isSidebarOpen }) => {
               {/* <ArrowForwardIcon fontSize="small" style={{ color: isDarkEnabled ? "gray" : "black" }} /> */}
             </div>
           ))}
+        </div>
+        <div className="w-full h-[30%] p-4">
+          <div className="w-full h-full bg-[#291c5f] rounded-2xl flex justify-center items-center">
+            <div className="text-center text-white">
+              <p className="font-bold">Amount</p>
+              <p className="font-bold text-lg">₹{totalRevenue.toFixed(2)}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

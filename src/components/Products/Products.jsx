@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSellerProductsThunk } from "../../redux/slices/productSlice";
 import Layout from "../Layout/Layout";
-import { BackIcon, SearchIcon } from "../../assets/icon/Icons";
+import { BackIcon, CrossIcon, SearchIcon } from "../../assets/icon/Icons";
 import { useNavigate } from "react-router-dom";
 import { useThemeColors } from "../utils/useThemeColor";
 
@@ -11,7 +11,9 @@ const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.product);
+  const [myproduct, setMyProduct] = useState(products?.data);
   const [selectedColors, setSelectedColors] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch(getSellerProductsThunk());
@@ -34,7 +36,7 @@ const Products = () => {
     return product.items.find((item) => item.color === selectedColor);
   };
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
 
   if (error)
     return <div>Error: {error?.message || "Something went wrong"}</div>;
@@ -43,35 +45,85 @@ const Products = () => {
     navigate("/dashboard");
   };
 
+  const handleSearch = (e) => {
+    const searchText = e.target.value.toLowerCase();
+    setSearch(searchText);
+    const filteredProducts = myproduct?.filter((item) =>
+      item.name.toLowerCase().includes(searchText)
+    );
+    console.log(filteredProducts, myproduct);
+    if (searchText) {
+      setMyProduct(filteredProducts);
+    } else {
+      setMyProduct(products?.data);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearch("");
+    setMyProduct(products?.data);
+  };
+
   return (
     <Layout>
       <div className="flex justify-between mb-4">
         <div className="flex justify-start gap-3 items-center">
           <div
             onClick={back}
-            className={`w-8 md:w-12 h-8 md:h-12 bg-[${useThemeColors(isDarkEnabled).cardBg}]    rounded-full flex justify-center items-center cursor-pointer`}
+            className={`w-8 md:w-12 h-8 md:h-12 bg-[${
+              useThemeColors(isDarkEnabled).cardBg
+            }]    rounded-full flex justify-center items-center cursor-pointer`}
           >
-            <BackIcon color={`${useThemeColors(isDarkEnabled).text}`} width="24" height="24" />
+            <BackIcon
+              color={`${useThemeColors(isDarkEnabled).text}`}
+              width="24"
+              height="24"
+            />
           </div>
           <h1 className="text-xl md:text-3xl font-extrabold text-center text-[#fff]">
             Inventory
           </h1>
         </div>
         <div className="relative">
-          <input type="text" placeholder="Search" className={`bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] pl-10 outline-none h-10 md:h-12 rounded-full w-40  md:w-48`} />
-          <div className="absolute top-2 md:top-3 left-2"><SearchIcon color="#a5a4a4" width="24" height="24"/></div>
-        </div> 
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearch}
+            placeholder="Search"
+            className={`bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${
+              useThemeColors(isDarkEnabled).text
+            }] pl-10 outline-none h-10 md:h-12 rounded-full w-40  md:w-48`}
+          />
+          <div className="absolute top-2 md:top-3 left-2">
+            <SearchIcon color="#a5a4a4" width="24" height="24" />
+          </div>
+          {search && (
+            <div
+              onClick={clearSearch}
+              className="absolute top-3 right-2 w-5 h-5 rounded-full bg-[#c9c8c8]"
+            >
+              <CrossIcon color="#2e10dc" width="20" height="20" />
+            </div>
+          )}
+        </div>
       </div>
-      <div className={`w-full bg-[${useThemeColors(isDarkEnabled).cardBg}]  h-auto md:p-4 mb-2 rounded-2xl`}>
+      <div
+        className={`w-full bg-[${
+          useThemeColors(isDarkEnabled).cardBg
+        }]  h-auto md:p-4 mb-2 rounded-2xl`}
+      >
         <div className="flex flex-wrap gap-6 p-1 md:p-2">
-          {products?.data && products.data.length > 0 ? (
-            products.data.map((product) => {
+          {myproduct && myproduct?.length > 0 ? (
+            myproduct?.map((product) => {
               const selectedColorDetails = getSelectedColorDetails(product._id);
-
               return (
                 <div
                   key={product._id}
-                  className={`border rounded-lg overflow-hidden shadow-lg bg-[${useThemeColors(isDarkEnabled).cardBg}] text-[${useThemeColors(isDarkEnabled).text}] flex flex-col w-full sm:w-[calc(33.33%-16px)]`}
+                  className={`border rounded-lg overflow-hidden shadow-lg bg-[${
+                    useThemeColors(isDarkEnabled).cardBg
+                  }] text-[${
+                    useThemeColors(isDarkEnabled).text
+                  }] flex flex-col w-full sm:w-[calc(33.33%-16px)]`}
                 >
                   <div className="w-full h-72 relative">
                     <img

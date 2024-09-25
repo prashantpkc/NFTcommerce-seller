@@ -159,25 +159,25 @@ const ViewProfile = () => {
 
       {/* Second Card */}
       <div className={`border  bg-[${useThemeColors(isDarkEnabled).cardBg}]   p-6 lg:w-[580px] rounded-2xl w-full`}>
-        <h1 className={`text-lg font-semibold text-[${useThemeColors(isDarkEnabled).edittext}] `}>Seller Full Details</h1>
+        <h1 className={`text-lg font-semibold ${isDarkEnabled? "text-[#fff]":"text-[#131069]"}`}>Seller Full Details</h1>
         <hr className="mt-3 mb-6" />
 
         <div className="flex justify-between items-baseline">
           <div>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Full Name</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Email</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Phone</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Address</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Country</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>Pin Code</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Full Name</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Email</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Phone</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Address</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Country</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>Pin Code</p>
           </div>
           <div className="lg:ml-[200px] mt-4 lg:mt-0">
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.name}</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.email}</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.phone}</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.address}</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.country}</p>
-            <p className={`mb-2 text-[${useThemeColors(isDarkEnabled).edittext}] `}>{user?.postalCode}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.name}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.email}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.phone}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.address}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.country}</p>
+            <p className={`mb-2 ${isDarkEnabled? "text-[#fff]":"text-[#131069]"} `}>{user?.postalCode}</p>
           </div>
         </div>
       </div>

@@ -7,9 +7,11 @@ import { auth, provider } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser, googleAuthUser } from "../../redux/slices/authSlice";
 import { toast } from "react-hot-toast"; // Assuming you are using react-toastify for notifications
+import { CircularProgress } from "@mui/material";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [spin, setSpin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState(""); // Changed from fullName to name
@@ -18,12 +20,12 @@ const Signup = () => {
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-      toast.error(error.error);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     console.log(error);
+  //     toast.error(error.error);
+  //   }
+  // }, [error]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -35,15 +37,19 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
+      setSpin(true)
       const authResult = await dispatch(signupUser({ email, password, name }));
-      // Assuming the signupUser action returns a result with a success property
       if (authResult.payload?.success) {
+        setSpin(false)
         toast.success("Signed up successfully!");
-        navigate("/dashboard"); // Redirect to dashboard on successful signup
-      } 
+        navigate("/dashboard");
+      }else{
+        setSpin(false)
+        toast.error(authResult.payload?.error)
+      }
     } catch (err) {
       toast.error("An error occurred during signup");
-      console.error("Signup Error:", err);
+      setSpin(false)
     }
   };
   
@@ -151,9 +157,9 @@ const Signup = () => {
 
           <button
             onClick={handleSignup}
-            className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-4"
+            className="bg-yellow-300 text-black rounded-2xl w-full py-2 mb-4 flex justify-center items-center"
           >
-            Sign Up
+            {spin? <div className="flex gap-2"><CircularProgress size="20px" /> Submitting...</div>:"Sign Up"}
           </button>
 
           <p className="text-center mb-4">Already have an account?</p>

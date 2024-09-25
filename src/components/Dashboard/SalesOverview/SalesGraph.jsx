@@ -36,7 +36,7 @@ const SalesGraph = () => {
   console.log(useThemeColors(isDarkEnabled).cardBg);
 
   return (
-    <div className={`w-full h-96 rounded-2xl p-4 bg-[${useThemeColors(isDarkEnabled).cardBg}]`}>
+    <div className={`w-full h-96 rounded-2xl p-4 ${isDarkEnabled?"bg-[#0d012d]":"bg-[#fff]"}`}>
       <div className="flex justify-between mb-4">
         <div>
           <p className={`text-lg font-semibold text-[${useThemeColors(isDarkEnabled).text}]`}>Sales Overview</p>
